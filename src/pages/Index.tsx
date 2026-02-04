@@ -1,208 +1,137 @@
-import { IceCream, Snowflake, GlassWater, Cake } from "lucide-react";
 import Header from "@/components/Header";
 import HeroBanner from "@/components/HeroBanner";
-import CategorySection from "@/components/CategorySection";
-import FeaturesSection from "@/components/FeaturesSection";
 import Footer from "@/components/Footer";
-
-import iceCream1 from "@/assets/ice-cream-1.jpg";
-import iceCream2 from "@/assets/ice-cream-2.jpg";
-import iceCream3 from "@/assets/ice-cream-3.jpg";
-import iceCream4 from "@/assets/ice-cream-4.jpg";
-import popsicle1 from "@/assets/popsicle-1.jpg";
-import smoothie1 from "@/assets/smoothie-1.jpg";
-import dessert1 from "@/assets/dessert-1.jpg";
-import frozenYogurt1 from "@/assets/frozen-yogurt-1.jpg";
-
-const iceCreamProducts = [
-  {
-    id: 1,
-    name: "آيس كريم فانيلا فاخر",
-    price: 25.00,
-    originalPrice: 35.00,
-    image: iceCream1,
-    rating: 5,
-    reviews: 128,
-    badge: "-30%",
-    isNew: true,
-  },
-  {
-    id: 2,
-    name: "آيس كريم شوكولاتة بلجيكية",
-    price: 28.00,
-    image: iceCream2,
-    rating: 5,
-    reviews: 95,
-    isNew: true,
-  },
-  {
-    id: 3,
-    name: "آيس كريم فراولة طازجة",
-    price: 24.00,
-    image: iceCream3,
-    rating: 4,
-    reviews: 76,
-  },
-  {
-    id: 4,
-    name: "آيس كريم فستق سوري",
-    price: 32.00,
-    image: iceCream4,
-    rating: 5,
-    reviews: 142,
-    badge: "الأكثر مبيعاً",
-  },
-];
-
-const frozenProducts = [
-  {
-    id: 5,
-    name: "مثلجات فواكه مشكلة",
-    price: 18.00,
-    image: popsicle1,
-    rating: 4,
-    reviews: 67,
-    isNew: true,
-  },
-  {
-    id: 6,
-    name: "فروزن يوغرت توت",
-    price: 22.00,
-    originalPrice: 28.00,
-    image: frozenYogurt1,
-    rating: 5,
-    reviews: 89,
-    badge: "-20%",
-  },
-  {
-    id: 7,
-    name: "باريه فواكه استوائية",
-    price: 15.00,
-    image: popsicle1,
-    rating: 4,
-    reviews: 54,
-  },
-  {
-    id: 8,
-    name: "سوربيه مانجو",
-    price: 20.00,
-    image: frozenYogurt1,
-    rating: 5,
-    reviews: 102,
-  },
-];
-
-const juiceProducts = [
-  {
-    id: 9,
-    name: "سموذي مانجو طازج",
-    price: 16.00,
-    image: smoothie1,
-    rating: 5,
-    reviews: 234,
-    isNew: true,
-  },
-  {
-    id: 10,
-    name: "عصير فواكه استوائية",
-    price: 14.00,
-    image: smoothie1,
-    rating: 4,
-    reviews: 156,
-  },
-  {
-    id: 11,
-    name: "ميلك شيك فراولة",
-    price: 18.00,
-    originalPrice: 24.00,
-    image: smoothie1,
-    rating: 5,
-    reviews: 189,
-    badge: "-25%",
-  },
-  {
-    id: 12,
-    name: "سموذي توت مشكل",
-    price: 17.00,
-    image: smoothie1,
-    rating: 4,
-    reviews: 98,
-  },
-];
-
-const dessertProducts = [
-  {
-    id: 13,
-    name: "تارت فواكه مثلجة",
-    price: 35.00,
-    image: dessert1,
-    rating: 5,
-    reviews: 76,
-    isNew: true,
-  },
-  {
-    id: 14,
-    name: "كب كيك آيس كريم",
-    price: 28.00,
-    image: dessert1,
-    rating: 4,
-    reviews: 65,
-  },
-  {
-    id: 15,
-    name: "سندويش آيس كريم",
-    price: 22.00,
-    originalPrice: 30.00,
-    image: dessert1,
-    rating: 5,
-    reviews: 112,
-    badge: "-27%",
-  },
-  {
-    id: 16,
-    name: "بارفيه فواكه",
-    price: 26.00,
-    image: dessert1,
-    rating: 5,
-    reviews: 88,
-    badge: "جديد",
-  },
-];
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 
 const Index = () => {
+  // Fetch categories from database
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true });
+      
+      if (error) throw error;
+      return data;
+    }
+  });
+
+  // Fetch products from database
+  const { data: products } = useQuery({
+    queryKey: ['products'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*, category:categories(*)')
+        .eq('is_active', true);
+      
+      if (error) throw error;
+      return data;
+    }
+  });
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <HeroBanner />
-      <FeaturesSection />
       
-      <CategorySection
-        title="آيس كريم"
-        description="أشهى أنواع الآيس كريم بنكهات متنوعة وطازجة"
-        products={iceCreamProducts}
-        icon={<IceCream className="w-7 h-7 text-primary-foreground" />}
-      />
+      {/* Categories Section */}
+      <section className="py-16 container mx-auto px-4">
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 gradient-text">
+          أقسام المتجر
+        </h2>
+        
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          {categories?.map((category) => (
+            <div
+              key={category.id}
+              className="glass-card p-6 text-center hover:border-primary/50 transition-all cursor-pointer group"
+            >
+              <div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                <span className="text-primary text-2xl">
+                  {category.icon === 'tv' && '📺'}
+                  {category.icon === 'package' && '📦'}
+                  {category.icon === 'message-circle' && '💬'}
+                  {category.icon === 'users' && '👥'}
+                  {category.icon === 'gamepad-2' && '🎮'}
+                </span>
+              </div>
+              <h3 className="font-semibold text-foreground text-sm">{category.name}</h3>
+            </div>
+          ))}
+        </div>
 
-      <CategorySection
-        title="مثلجات"
-        description="مثلجات منعشة ولذيذة لجميع الأذواق"
-        products={frozenProducts}
-        icon={<Snowflake className="w-7 h-7 text-primary-foreground" />}
-      />
+        {(!categories || categories.length === 0) && (
+          <p className="text-center text-muted-foreground">لا توجد أقسام حالياً</p>
+        )}
+      </section>
 
-      <CategorySection
-        title="عصائر وسموذي"
-        description="مشروبات باردة ومنعشة محضرة بأجود المكونات"
-        products={juiceProducts}
-        icon={<GlassWater className="w-7 h-7 text-primary-foreground" />}
-      />
-
-      <CategorySection
-        title="حلويات مثلجة"
-        description="حلويات فاخرة ومثلجة لمناسباتكم الخاصة"
-        products={dessertProducts}
-        icon={<Cake className="w-7 h-7 text-primary-foreground" />}
-      />
+      {/* Products Section */}
+      {products && products.length > 0 && (
+        <section className="py-16 container mx-auto px-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 gradient-text">
+            المنتجات المتاحة
+          </h2>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <div
+                key={product.id}
+                className="glass-card p-4 hover:border-primary/50 transition-all"
+              >
+                {product.image_url ? (
+                  <img 
+                    src={product.image_url} 
+                    alt={product.name}
+                    className="w-full h-40 object-cover rounded-lg mb-4"
+                  />
+                ) : (
+                  <div className="w-full h-40 bg-secondary/50 rounded-lg mb-4 flex items-center justify-center">
+                    <span className="text-4xl">📦</span>
+                  </div>
+                )}
+                
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <h3 className="font-semibold text-foreground line-clamp-2">{product.name}</h3>
+                  {product.badge && (
+                    <span className="px-2 py-1 text-xs rounded-full bg-primary/20 text-primary whitespace-nowrap">
+                      {product.badge}
+                    </span>
+                  )}
+                </div>
+                
+                {product.description && (
+                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                    {product.description}
+                  </p>
+                )}
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-lg font-bold text-primary">
+                      {product.price} ر.ع
+                    </span>
+                    {product.original_price && (
+                      <span className="text-sm text-muted-foreground line-through">
+                        {product.original_price} ر.ع
+                      </span>
+                    )}
+                  </div>
+                  {product.is_new && (
+                    <span className="px-2 py-1 text-xs rounded-full bg-aurora/20 text-aurora">
+                      جديد
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       <Footer />
     </div>
