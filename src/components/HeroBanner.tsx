@@ -1,28 +1,27 @@
-import { Snowflake } from "lucide-react";
-
 const HeroBanner = () => {
   return (
-    <section className="relative min-h-[500px] flex items-center overflow-hidden pt-20">
+    <section className="relative min-h-[450px] flex items-center overflow-hidden pt-20">
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-secondary/20 to-background" />
-      <div className="absolute top-20 right-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 left-20 w-96 h-96 bg-aurora/10 rounded-full blur-3xl" />
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-secondary/10 to-background" />
+      <div className="absolute top-10 right-10 w-80 h-80 bg-primary/10 rounded-full blur-[100px]" />
+      <div className="absolute bottom-10 left-10 w-96 h-96 bg-accent/10 rounded-full blur-[120px]" />
       
-      {/* Floating Ice Icons */}
+      {/* Floating Ice Particles */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {[...Array(6)].map((_, i) => (
-          <Snowflake
+        {[...Array(8)].map((_, i) => (
+          <div
             key={i}
-            className="absolute text-primary/20 animate-float"
+            className="absolute text-white/10 animate-float"
             style={{
-              width: `${20 + Math.random() * 25}px`,
-              height: `${20 + Math.random() * 25}px`,
+              fontSize: `${16 + Math.random() * 20}px`,
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
-              animationDelay: `${i * 0.5}s`,
+              animationDelay: `${i * 0.7}s`,
               animationDuration: `${5 + Math.random() * 4}s`,
             }}
-          />
+          >
+            ❄
+          </div>
         ))}
       </div>
 
@@ -30,8 +29,8 @@ const HeroBanner = () => {
         <div className="flex flex-col lg:flex-row items-center gap-12">
           {/* Text Content */}
           <div className="flex-1 text-center lg:text-right">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/30 mb-6">
-              <Snowflake className="w-4 h-4 text-primary" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/30 mb-6 backdrop-blur-sm">
+              <span className="text-sm">❄️</span>
               <span className="text-primary text-sm font-medium">أفضل الخدمات الرقمية</span>
             </div>
             
@@ -48,29 +47,29 @@ const HeroBanner = () => {
             {/* Stats */}
             <div className="flex items-center gap-8 justify-center lg:justify-start">
               <div className="text-center">
-                <div className="text-3xl font-bold gradient-text">+500</div>
-                <div className="text-muted-foreground text-sm">منتج رقمي</div>
+                <div className="text-3xl font-bold gradient-text">+1K</div>
+                <div className="text-muted-foreground text-sm">طلب مكتمل</div>
               </div>
-              <div className="w-px h-12 bg-border" />
+              <div className="w-px h-12 bg-border/50" />
               <div className="text-center">
-                <div className="text-3xl font-bold gradient-text">+10K</div>
-                <div className="text-muted-foreground text-sm">عميل سعيد</div>
+                <div className="text-3xl font-bold gradient-text">آمن</div>
+                <div className="text-muted-foreground text-sm">100%</div>
               </div>
-              <div className="w-px h-12 bg-border" />
+              <div className="w-px h-12 bg-border/50" />
               <div className="text-center">
-                <div className="text-3xl font-bold gradient-text">24/7</div>
-                <div className="text-muted-foreground text-sm">دعم فني</div>
+                <div className="text-3xl font-bold gradient-text">فوري</div>
+                <div className="text-muted-foreground text-sm">تسليم</div>
               </div>
             </div>
           </div>
 
           {/* Hero Visual */}
           <div className="flex-1 relative">
-            <div className="relative w-full max-w-md mx-auto">
-              <div className="w-full aspect-square rounded-full bg-gradient-to-br from-primary/20 to-aurora/20 blur-3xl absolute inset-0" />
-              <div className="relative glass-card rounded-3xl p-8">
-                <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary/10 to-aurora/10 flex items-center justify-center border border-primary/20">
-                  <Snowflake className="w-24 h-24 text-primary/50" />
+            <div className="relative w-full max-w-sm mx-auto">
+              <div className="w-full aspect-square rounded-full bg-gradient-to-br from-primary/15 to-accent/15 blur-3xl absolute inset-0" />
+              <div className="relative glass-card rounded-3xl p-8 animate-pulse-glow">
+                <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center border border-primary/20">
+                  <span className="text-8xl">❄️</span>
                 </div>
               </div>
             </div>
