@@ -1,40 +1,40 @@
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* فروزن - نظام التصميم الجليدي */
+/* فروزن - نظام التصميم الجليدي المحسن */
 
 @layer base {
   :root {
-    /* الألوان الأساسية - داكنة */
-    --background: 220 20% 10%;
+    /* الألوان الأساسية - داكنة مع أزرق جليدي */
+    --background: 220 25% 8%;
     --foreground: 0 0% 98%;
 
-    --card: 220 20% 13%;
+    --card: 220 25% 12%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 220 20% 11%;
+    --popover: 220 25% 10%;
     --popover-foreground: 0 0% 98%;
 
     --primary: 195 100% 50%;
-    --primary-foreground: 220 20% 10%;
+    --primary-foreground: 220 25% 8%;
 
-    --secondary: 220 15% 18%;
+    --secondary: 220 20% 15%;
     --secondary-foreground: 0 0% 90%;
 
-    --muted: 220 15% 20%;
+    --muted: 220 20% 18%;
     --muted-foreground: 220 10% 55%;
 
-    --accent: 280 60% 65%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 195 90% 60%;
+    --accent-foreground: 220 25% 8%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 15% 20%;
-    --input: 220 15% 18%;
+    --border: 220 20% 18%;
+    --input: 220 20% 15%;
     --ring: 195 100% 50%;
 
     --radius: 0.75rem;
@@ -48,52 +48,52 @@
 
     /* التدرجات */
     --gradient-ice: linear-gradient(135deg, hsl(195 100% 50%), hsl(180 100% 45%));
-    --gradient-frost: linear-gradient(180deg, hsl(220 20% 13%), hsl(220 20% 8%));
-    --gradient-glass: linear-gradient(135deg, hsl(220 15% 20% / 0.3), hsl(220 15% 15% / 0.1));
-    --gradient-aurora: linear-gradient(135deg, hsl(195 100% 50%), hsl(180 100% 50%), hsl(160 100% 45%));
+    --gradient-frost: linear-gradient(180deg, hsl(220 25% 12%), hsl(220 25% 6%));
+    --gradient-glass: linear-gradient(135deg, hsl(220 20% 18% / 0.3), hsl(220 20% 12% / 0.1));
+    --gradient-aurora: linear-gradient(135deg, hsl(195 100% 50%), hsl(180 100% 50%), hsl(195 100% 60%));
     
     /* الظلال */
     --shadow-ice: 0 8px 32px hsl(195 100% 50% / 0.15);
     --shadow-glow: 0 0 30px hsl(195 100% 50% / 0.3);
-    --shadow-card: 0 4px 24px hsl(220 20% 5% / 0.4);
+    --shadow-card: 0 4px 24px hsl(220 25% 5% / 0.5);
 
-    --sidebar-background: 220 20% 11%;
+    --sidebar-background: 220 25% 10%;
     --sidebar-foreground: 0 0% 95%;
     --sidebar-primary: 195 100% 50%;
-    --sidebar-primary-foreground: 220 20% 10%;
-    --sidebar-accent: 220 15% 18%;
+    --sidebar-primary-foreground: 220 25% 8%;
+    --sidebar-accent: 220 20% 15%;
     --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 220 15% 20%;
+    --sidebar-border: 220 20% 18%;
     --sidebar-ring: 195 100% 50%;
   }
 
   .dark {
-    --background: 220 20% 10%;
+    --background: 220 25% 8%;
     --foreground: 0 0% 98%;
-    --card: 220 20% 13%;
+    --card: 220 25% 12%;
     --card-foreground: 0 0% 98%;
-    --popover: 220 20% 11%;
+    --popover: 220 25% 10%;
     --popover-foreground: 0 0% 98%;
     --primary: 195 100% 50%;
-    --primary-foreground: 220 20% 10%;
-    --secondary: 220 15% 18%;
+    --primary-foreground: 220 25% 8%;
+    --secondary: 220 20% 15%;
     --secondary-foreground: 0 0% 90%;
-    --muted: 220 15% 20%;
+    --muted: 220 20% 18%;
     --muted-foreground: 220 10% 55%;
-    --accent: 280 60% 65%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 195 90% 60%;
+    --accent-foreground: 220 25% 8%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 15% 20%;
-    --input: 220 15% 18%;
+    --border: 220 20% 18%;
+    --input: 220 20% 15%;
     --ring: 195 100% 50%;
-    --sidebar-background: 220 20% 11%;
+    --sidebar-background: 220 25% 10%;
     --sidebar-foreground: 0 0% 95%;
     --sidebar-primary: 195 100% 50%;
-    --sidebar-primary-foreground: 220 20% 10%;
-    --sidebar-accent: 220 15% 18%;
+    --sidebar-primary-foreground: 220 25% 8%;
+    --sidebar-accent: 220 20% 15%;
     --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 220 15% 20%;
+    --sidebar-border: 220 20% 18%;
     --sidebar-ring: 195 100% 50%;
   }
 }
@@ -108,7 +108,8 @@
   }
 
   body {
-    @apply bg-background text-foreground font-tajawal antialiased;
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Cairo', sans-serif;
   }
 }
 
@@ -132,25 +133,56 @@
   }
 
   .frozen-logo {
-    @apply bg-clip-text text-transparent;
-    background: linear-gradient(135deg, hsl(195 100% 70%), hsl(195 100% 50%), hsl(180 100% 50%));
-    text-shadow: 0 0 30px hsl(195 100% 50% / 0.3);
+    @apply bg-clip-text text-transparent font-bold;
+    background: linear-gradient(135deg, hsl(195 100% 75%), hsl(195 100% 55%), hsl(180 100% 55%));
+    text-shadow: 0 0 40px hsl(195 100% 50% / 0.4);
   }
 
   .auth-input {
-    @apply w-full h-12 px-4 bg-secondary/50 border border-border/50 rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all;
+    @apply w-full h-12 px-4 bg-secondary/50 border border-border/50 rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-300;
   }
 
   .auth-button {
-    @apply w-full h-12 rounded-lg font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply w-full h-12 rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .auth-button-primary {
-    @apply auth-button bg-accent/80 hover:bg-accent text-white;
+    @apply auth-button bg-gradient-to-r from-primary to-accent text-primary-foreground hover:shadow-lg hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98];
   }
 
   .auth-button-secondary {
-    @apply auth-button bg-accent/20 border border-accent/30 text-accent hover:bg-accent/30;
+    @apply auth-button bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 hover:border-primary/50;
+  }
+
+  /* بطاقة المنتج المحسنة */
+  .product-card {
+    @apply glass-card p-4 transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1;
+  }
+
+  /* أزرار أنحف مع تأثيرات */
+  .btn-slim {
+    @apply h-9 px-5 text-sm font-medium rounded-lg transition-all duration-300;
+  }
+
+  .btn-slim-primary {
+    @apply btn-slim bg-gradient-to-r from-primary to-accent text-primary-foreground hover:shadow-md hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98];
+  }
+
+  .btn-slim-secondary {
+    @apply btn-slim bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20;
+  }
+
+  /* رقاقة الثلج المحسنة */
+  .snowflake {
+    position: absolute;
+    color: hsl(195 100% 90% / 0.15);
+    pointer-events: none;
+    animation: snowfall linear infinite;
+  }
+
+  .snowflake::before {
+    content: '❄';
+    font-size: inherit;
   }
 }
 
@@ -167,9 +199,13 @@
     animation: pulse-glow 2s ease-in-out infinite;
   }
 
+  .animate-snow {
+    animation: snowfall linear infinite;
+  }
+
   @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(5deg); }
   }
 
   @keyframes shimmer {
@@ -178,7 +214,50 @@
   }
 
   @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 20px hsl(195 100% 50% / 0.3); }
-    50% { box-shadow: 0 0 40px hsl(195 100% 50% / 0.5); }
+    0%, 100% { 
+      box-shadow: 0 0 20px hsl(195 100% 50% / 0.2);
+      transform: scale(1);
+    }
+    50% { 
+      box-shadow: 0 0 40px hsl(195 100% 50% / 0.4);
+      transform: scale(1.02);
+    }
+  }
+
+  @keyframes snowfall {
+    0% {
+      transform: translateY(-10vh) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(110vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  /* تأثير التموج للأزرار */
+  .ripple {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ripple::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, hsl(195 100% 70% / 0.3) 0%, transparent 70%);
+    transform: scale(0);
+    transition: transform 0.5s ease-out;
+  }
+
+  .ripple:active::after {
+    transform: scale(4);
+    transition: transform 0s;
   }
 }

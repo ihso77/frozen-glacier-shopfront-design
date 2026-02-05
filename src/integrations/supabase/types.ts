@@ -71,6 +71,42 @@ export type Database = {
         }
         Relationships: []
       }
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_read: boolean | null
+          replied_at: string | null
+          reply_content: string | null
+          sender_email: string
+          sender_name: string | null
+          subject: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          replied_at?: string | null
+          reply_content?: string | null
+          sender_email: string
+          sender_name?: string | null
+          subject: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          replied_at?: string | null
+          reply_content?: string | null
+          sender_email?: string
+          sender_name?: string | null
+          subject?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           badge: string | null

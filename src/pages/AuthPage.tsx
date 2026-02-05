@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Snowflake, Mail, Lock, User, Phone, Sparkles, Zap, Shield, ArrowLeft } from "lucide-react";
+import { Mail, Lock, User, Phone, Shield, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
+import SnowBackground from "@/components/SnowBackground";
 
 const loginSchema = z.object({
   email: z.string().email("البريد الإلكتروني غير صحيح"),
@@ -29,6 +30,13 @@ const AuthPage = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // التحقق إذا كان المستخدم مسجل
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) navigate("/");
+    });
+  }, [navigate]);
 
   // Login form state
   const [loginData, setLoginData] = useState({
@@ -156,7 +164,7 @@ const AuthPage = () => {
       return;
     }
 
-    // Create profile
+    // إنشاء الملف الشخصي والدور
     if (data.user) {
       const { error: profileError } = await supabase.from("profiles").insert({
         user_id: data.user.id,
@@ -170,7 +178,6 @@ const AuthPage = () => {
         console.error("Profile creation error:", profileError);
       }
 
-      // Create default member role
       const { error: roleError } = await supabase.from("user_roles").insert({
         user_id: data.user.id,
         role: "member",
@@ -185,30 +192,35 @@ const AuthPage = () => {
 
     toast({
       title: "تم إنشاء الحساب!",
-      description: "يرجى التحقق من بريدك الإلكتروني لتفعيل الحساب",
+      description: "تم إرسال رسالة تحقق إلى بريدك الإلكتروني. يرجى التحقق لتفعيل حسابك.",
     });
     
     setIsLogin(true);
   };
 
   const features = [
-    { icon: Sparkles, title: "منتجات حصرية", desc: "احصل على أفضل العروض والحسابات المميزة" },
-    { icon: Zap, title: "تسليم فوري", desc: "استلم طلباتك في أقل من دقيقة" },
-    { icon: Shield, title: "أمان تام", desc: "جميع معاملاتك محمية بأعلى معايير الأمان" },
+    { icon: Shield, title: "حماية متقدمة", desc: "تشفير عالي المستوى لحماية بياناتك" },
   ];
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-background flex relative">
+      <SnowBackground />
+      
       {/* Left Side - Features */}
-      <div className="hidden lg:flex flex-1 items-center justify-center p-12 relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-secondary/20 to-background" />
-        <div className="absolute top-20 right-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 left-20 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
-        
+      <div className="hidden lg:flex flex-1 items-center justify-center p-12 relative z-10">
         <div className="relative z-10 max-w-md space-y-8">
+          {/* شعار كبير */}
+          <div className="text-center mb-12">
+            <div className="w-24 h-24 mx-auto rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 flex items-center justify-center mb-6 shadow-lg shadow-primary/20">
+              <span className="text-5xl">❄️</span>
+            </div>
+            <h2 className="text-4xl font-bold frozen-logo mb-4">فروزن</h2>
+            <p className="text-muted-foreground">متجرك الموثوق للخدمات الرقمية</p>
+          </div>
+
           {features.map((feature, i) => (
             <div key={i} className="glass-card p-6 flex flex-col items-center text-center">
-              <feature.icon className="w-8 h-8 text-primary mb-4" />
+              <feature.icon className="w-10 h-10 text-primary mb-4" />
               <h3 className="font-bold text-lg text-foreground mb-2">{feature.title}</h3>
               <p className="text-muted-foreground text-sm">{feature.desc}</p>
             </div>
@@ -217,14 +229,14 @@ const AuthPage = () => {
       </div>
 
       {/* Right Side - Auth Form */}
-      <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
+      <div className="flex-1 flex items-center justify-center p-6 lg:p-12 relative z-10">
         <div className="w-full max-w-md">
           <div className="glass-card p-8 lg:p-10">
             {/* Logo */}
             <div className="text-center mb-8">
-              <Link to="/" className="inline-flex items-center gap-2 mb-6">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-aurora/20 border border-primary/30 flex items-center justify-center">
-                  <Snowflake className="w-5 h-5 text-primary" />
+              <Link to="/" className="inline-flex items-center gap-2 mb-6 group">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 flex items-center justify-center shadow-lg shadow-primary/20 group-hover:shadow-primary/40 transition-all duration-300">
+                  <span className="text-2xl">❄️</span>
                 </div>
                 <span className="text-2xl font-black frozen-logo">فروزن</span>
               </Link>
@@ -241,7 +253,7 @@ const AuthPage = () => {
               <form onSubmit={handleLogin} className="space-y-5">
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-                    <Mail className="w-4 h-4" />
+                    <Mail className="w-4 h-4 text-primary" />
                     البريد الإلكتروني
                   </label>
                   <input
@@ -257,7 +269,7 @@ const AuthPage = () => {
 
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-                    <Lock className="w-4 h-4" />
+                    <Lock className="w-4 h-4 text-primary" />
                     كلمة المرور
                   </label>
                   <input
@@ -275,13 +287,13 @@ const AuthPage = () => {
                   <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
                     <input
                       type="checkbox"
-                      className="w-4 h-4 rounded border-border bg-secondary"
+                      className="w-4 h-4 rounded border-border bg-secondary accent-primary"
                       checked={loginData.rememberMe}
                       onChange={(e) => setLoginData({ ...loginData, rememberMe: e.target.checked })}
                     />
                     تذكرني
                   </label>
-                  <button type="button" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  <button type="button" className="text-sm text-primary hover:text-primary/80 transition-colors">
                     نسيت كلمة المرور؟
                   </button>
                 </div>
@@ -291,20 +303,7 @@ const AuthPage = () => {
                   disabled={loading}
                   className="auth-button-primary flex items-center justify-center gap-2"
                 >
-                  {loading ? "جاري التحميل..." : (
-                    <>
-                      <Zap className="w-4 h-4" />
-                      الدخول السريع
-                    </>
-                  )}
-                </button>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="auth-button-secondary flex items-center justify-center gap-2"
-                >
-                  تسجيل الدخول
+                  {loading ? "جاري التحميل..." : "تسجيل الدخول"}
                   <ArrowLeft className="w-4 h-4" />
                 </button>
               </form>
@@ -313,7 +312,7 @@ const AuthPage = () => {
               <form onSubmit={handleRegister} className="space-y-4">
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-                    <User className="w-4 h-4" />
+                    <User className="w-4 h-4 text-primary" />
                     الاسم الكامل
                   </label>
                   <input
@@ -328,7 +327,7 @@ const AuthPage = () => {
 
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-                    <Phone className="w-4 h-4" />
+                    <Phone className="w-4 h-4 text-primary" />
                     رقم الجوال
                   </label>
                   <input
@@ -343,17 +342,17 @@ const AuthPage = () => {
 
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-                    <User className="w-4 h-4" />
+                    <User className="w-4 h-4 text-primary" />
                     الجنس
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       type="button"
                       onClick={() => setRegisterData({ ...registerData, gender: "male" })}
-                      className={`h-12 rounded-lg border transition-all flex items-center justify-center gap-2 ${
+                      className={`h-12 rounded-xl border transition-all duration-300 flex items-center justify-center gap-2 ${
                         registerData.gender === "male"
-                          ? "border-primary bg-primary/10 text-foreground"
-                          : "border-border bg-secondary/50 text-muted-foreground"
+                          ? "border-primary bg-primary/10 text-foreground shadow-lg shadow-primary/10"
+                          : "border-border bg-secondary/50 text-muted-foreground hover:border-primary/50"
                       }`}
                     >
                       👨 ذكر
@@ -361,10 +360,10 @@ const AuthPage = () => {
                     <button
                       type="button"
                       onClick={() => setRegisterData({ ...registerData, gender: "female" })}
-                      className={`h-12 rounded-lg border transition-all flex items-center justify-center gap-2 ${
+                      className={`h-12 rounded-xl border transition-all duration-300 flex items-center justify-center gap-2 ${
                         registerData.gender === "female"
-                          ? "border-primary bg-primary/10 text-foreground"
-                          : "border-border bg-secondary/50 text-muted-foreground"
+                          ? "border-primary bg-primary/10 text-foreground shadow-lg shadow-primary/10"
+                          : "border-border bg-secondary/50 text-muted-foreground hover:border-primary/50"
                       }`}
                     >
                       👩 أنثى
@@ -374,7 +373,7 @@ const AuthPage = () => {
 
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-                    <Mail className="w-4 h-4" />
+                    <Mail className="w-4 h-4 text-primary" />
                     البريد الإلكتروني
                   </label>
                   <input
@@ -390,7 +389,7 @@ const AuthPage = () => {
 
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-                    <Lock className="w-4 h-4" />
+                    <Lock className="w-4 h-4 text-primary" />
                     كلمة المرور
                   </label>
                   <input
@@ -406,7 +405,7 @@ const AuthPage = () => {
 
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-                    <Lock className="w-4 h-4" />
+                    <Lock className="w-4 h-4 text-primary" />
                     تأكيد كلمة المرور
                   </label>
                   <input
@@ -424,15 +423,15 @@ const AuthPage = () => {
                   <input
                     type="checkbox"
                     id="terms"
-                    className="w-4 h-4 rounded border-border bg-secondary"
+                    className="w-4 h-4 rounded border-border bg-secondary accent-primary"
                     checked={registerData.agreeTerms}
                     onChange={(e) => setRegisterData({ ...registerData, agreeTerms: e.target.checked })}
                   />
                   <label htmlFor="terms" className="text-sm text-muted-foreground">
                     أوافق على{" "}
-                    <span className="text-primary cursor-pointer">سياسة الخدمة</span>
+                    <span className="text-primary cursor-pointer hover:underline">سياسة الخدمة</span>
                     {" "}و{" "}
-                    <span className="text-primary cursor-pointer">سياسة الإرجاع</span>
+                    <span className="text-primary cursor-pointer hover:underline">سياسة الإرجاع</span>
                   </label>
                 </div>
                 {errors.agreeTerms && <p className="text-destructive text-xs">{errors.agreeTerms}</p>}
@@ -440,32 +439,29 @@ const AuthPage = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="auth-button-secondary flex items-center justify-center gap-2"
+                  className="auth-button-primary flex items-center justify-center gap-2"
                 >
-                  {loading ? "جاري التحميل..." : (
-                    <>
-                      إنشاء الحساب
-                      <ArrowLeft className="w-4 h-4" />
-                    </>
-                  )}
+                  {loading ? "جاري التحميل..." : "إنشاء الحساب"}
+                  <ArrowLeft className="w-4 h-4" />
                 </button>
               </form>
             )}
 
-            {/* Toggle */}
-            <p className="text-center text-sm text-muted-foreground mt-6">
-              {isLogin ? "ليس لديك حساب؟" : "لديك حساب بالفعل؟"}
+            {/* Toggle Auth Mode */}
+            <div className="mt-8 text-center border-t border-border pt-6">
+              <p className="text-muted-foreground text-sm mb-3">
+                {isLogin ? "ليس لديك حساب؟" : "لديك حساب بالفعل؟"}
+              </p>
               <button
-                type="button"
                 onClick={() => {
                   setIsLogin(!isLogin);
                   setErrors({});
                 }}
-                className="text-primary font-medium hover:underline mr-1"
+                className="auth-button-secondary"
               >
-                {isLogin ? "إنشاء حساب" : "تسجيل الدخول"}
+                {isLogin ? "إنشاء حساب جديد" : "تسجيل الدخول"}
               </button>
-            </p>
+            </div>
           </div>
         </div>
       </div>
