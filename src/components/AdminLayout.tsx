@@ -10,7 +10,9 @@ import {
   Menu,
   X,
   ChevronLeft,
-  Mail
+  Mail,
+  Ticket,
+  Key
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -119,6 +121,8 @@ const AdminLayout = () => {
     { name: "المنتجات", href: "/admin/products", icon: Package },
     { name: "المستخدمين", href: "/admin/users", icon: Users },
     { name: "الرسائل", href: "/admin/messages", icon: Mail, badge: unreadMessages },
+    { name: "تذاكر الدعم", href: "/admin/tickets", icon: Ticket },
+    { name: "الأكواد", href: "/admin/codes", icon: Key },
     { name: "الإعدادات", href: "/admin/settings", icon: Settings },
   ];
 

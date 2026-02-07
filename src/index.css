@@ -135,7 +135,7 @@
   .frozen-logo {
     @apply bg-clip-text text-transparent font-bold;
     background: linear-gradient(135deg, hsl(195 100% 75%), hsl(195 100% 55%), hsl(180 100% 55%));
-    text-shadow: 0 0 40px hsl(195 100% 50% / 0.4);
+    filter: drop-shadow(0 0 20px hsl(195 100% 50% / 0.4));
   }
 
   .auth-input {

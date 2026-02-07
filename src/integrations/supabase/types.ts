@@ -107,6 +107,56 @@ export type Database = {
         }
         Relationships: []
       }
+      orders: {
+        Row: {
+          created_at: string
+          id: string
+          is_redeemed: boolean
+          payment_method: string
+          payment_status: string
+          price: number
+          product_id: string | null
+          product_name: string
+          redeemed_at: string | null
+          redemption_code: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_redeemed?: boolean
+          payment_method?: string
+          payment_status?: string
+          price: number
+          product_id?: string | null
+          product_name: string
+          redeemed_at?: string | null
+          redemption_code?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_redeemed?: boolean
+          payment_method?: string
+          payment_status?: string
+          price?: number
+          product_id?: string | null
+          product_name?: string
+          redeemed_at?: string | null
+          redemption_code?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           badge: string | null
@@ -219,6 +269,68 @@ export type Database = {
           value?: Json
         }
         Relationships: []
+      }
+      support_tickets: {
+        Row: {
+          closed_at: string | null
+          created_at: string
+          id: string
+          status: string
+          subject: string
+          user_email: string
+          user_id: string
+        }
+        Insert: {
+          closed_at?: string | null
+          created_at?: string
+          id?: string
+          status?: string
+          subject: string
+          user_email: string
+          user_id: string
+        }
+        Update: {
+          closed_at?: string | null
+          created_at?: string
+          id?: string
+          status?: string
+          subject?: string
+          user_email?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ticket_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          sender_id: string
+          ticket_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          sender_id: string
+          ticket_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          sender_id?: string
+          ticket_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ticket_messages_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
