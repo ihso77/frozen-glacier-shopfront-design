@@ -164,29 +164,7 @@ const AuthPage = () => {
       return;
     }
 
-    // إنشاء الملف الشخصي والدور
-    if (data.user) {
-      const { error: profileError } = await supabase.from("profiles").insert({
-        user_id: data.user.id,
-        full_name: registerData.fullName,
-        phone: registerData.phone || null,
-        gender: registerData.gender || null,
-        email: registerData.email,
-      });
-
-      if (profileError) {
-        console.error("Profile creation error:", profileError);
-      }
-
-      const { error: roleError } = await supabase.from("user_roles").insert({
-        user_id: data.user.id,
-        role: "member",
-      });
-
-      if (roleError) {
-        console.error("Role creation error:", roleError);
-      }
-    }
+    // Profile and role are now created automatically via database trigger
 
     setLoading(false);
 

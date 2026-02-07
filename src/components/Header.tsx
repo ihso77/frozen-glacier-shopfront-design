@@ -1,8 +1,9 @@
-import { User, Menu, Settings } from "lucide-react";
+import { User, Menu, Settings, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useCart } from "@/contexts/CartContext";
 
 const navLinks = [
   { name: "الرئيسية", href: "/" },
@@ -92,6 +93,9 @@ const Header = () => {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
+            {/* Cart Button */}
+            <CartButton />
+
             {user ? (
               <>
                 {isAdmin && (
@@ -176,6 +180,24 @@ const Header = () => {
         )}
       </div>
     </header>
+  );
+};
+
+const CartButton = () => {
+  const { totalItems, setIsOpen } = useCart();
+
+  return (
+    <button
+      onClick={() => setIsOpen(true)}
+      className="relative p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-all duration-300"
+    >
+      <ShoppingBag className="w-5 h-5" />
+      {totalItems > 0 && (
+        <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">
+          {totalItems}
+        </span>
+      )}
+    </button>
   );
 };
 
