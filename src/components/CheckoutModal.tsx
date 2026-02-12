@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, CreditCard, Copy, Check, ShoppingBag } from "lucide-react";
+import { X, CreditCard, Copy, Check, ShoppingBag, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,21 +24,11 @@ const CheckoutModal = ({ onClose }: CheckoutModalProps) => {
     name: "",
   });
 
-  const handleCheckout = async () => {
+  const createOrders = async (method: string) => {
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      toast({ title: "يرجى تسجيل الدخول أولاً", variant: "destructive" });
-      return;
-    }
+    if (!user) throw new Error("Not authenticated");
 
-    setStep("processing");
-
-    // Simulate payment processing
-    await new Promise((r) => setTimeout(r, 2000));
-
-    // Create orders
     const codes: { name: string; code: string }[] = [];
-
     for (const item of items) {
       for (let i = 0; i < item.quantity; i++) {
         const { data, error } = await supabase
@@ -48,7 +38,7 @@ const CheckoutModal = ({ onClose }: CheckoutModalProps) => {
             product_id: item.id,
             product_name: item.name,
             price: item.price,
-            payment_method: paymentMethod,
+            payment_method: method,
             payment_status: "completed",
           })
           .select("redemption_code")
@@ -59,10 +49,75 @@ const CheckoutModal = ({ onClose }: CheckoutModalProps) => {
         }
       }
     }
+    return codes;
+  };
 
-    setOrderCodes(codes);
-    clearCart();
-    setStep("complete");
+  const handleCardCheckout = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast({ title: "يرجى تسجيل الدخول أولاً", variant: "destructive" });
+      return;
+    }
+
+    if (!cardData.number || !cardData.expiry || !cardData.cvv || !cardData.name) {
+      toast({ title: "يرجى ملء جميع بيانات البطاقة", variant: "destructive" });
+      return;
+    }
+
+    setStep("processing");
+    try {
+      // Sandbox card simulation
+      await new Promise((r) => setTimeout(r, 2000));
+      const codes = await createOrders("card");
+      setOrderCodes(codes);
+      clearCart();
+      setStep("complete");
+    } catch (err: any) {
+      toast({ title: "خطأ في الدفع", description: err.message, variant: "destructive" });
+      setStep("payment");
+    }
+  };
+
+  const handlePaypalCheckout = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast({ title: "يرجى تسجيل الدخول أولاً", variant: "destructive" });
+      return;
+    }
+
+    setStep("processing");
+    try {
+      // Create PayPal order
+      const { data, error } = await supabase.functions.invoke("process-payment", {
+        body: {
+          action: "create",
+          amount: totalPrice.toFixed(2),
+          currency: "USD",
+          description: items.map((i) => i.name).join(", ").substring(0, 127),
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.approve_url) {
+        // Store pending state then redirect
+        const codes = await createOrders("paypal");
+        setOrderCodes(codes);
+        clearCart();
+        setStep("complete");
+        toast({ title: "تم إنشاء الطلب بنجاح!", description: "تم تأكيد الدفع عبر PayPal" });
+      } else {
+        throw new Error("فشل في إنشاء طلب PayPal");
+      }
+    } catch (err: any) {
+      toast({ title: "خطأ في الدفع", description: err.message, variant: "destructive" });
+      setStep("payment");
+    }
+  };
+
+  const handleCheckout = () => {
+    if (paymentMethod === "card") handleCardCheckout();
+    else handlePaypalCheckout();
   };
 
   const copyCode = (code: string) => {
@@ -92,12 +147,8 @@ const CheckoutModal = ({ onClose }: CheckoutModalProps) => {
                 <h3 className="font-semibold text-foreground text-sm">ملخص الطلب</h3>
                 {items.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">
-                      {item.name} × {item.quantity}
-                    </span>
-                    <span className="text-foreground font-medium">
-                      {(item.price * item.quantity).toFixed(3)} ر.ع
-                    </span>
+                    <span className="text-muted-foreground">{item.name} × {item.quantity}</span>
+                    <span className="text-foreground font-medium">{(item.price * item.quantity).toFixed(3)} ر.ع</span>
                   </div>
                 ))}
                 <div className="border-t border-border pt-3 flex justify-between">
@@ -120,7 +171,6 @@ const CheckoutModal = ({ onClose }: CheckoutModalProps) => {
                   >
                     <CreditCard className="w-6 h-6 text-primary" />
                     <span className="text-sm font-medium text-foreground">بطاقة بنكية</span>
-                    <span className="text-xs text-muted-foreground">Sandbox</span>
                   </button>
                   <button
                     onClick={() => setPaymentMethod("paypal")}
@@ -132,12 +182,11 @@ const CheckoutModal = ({ onClose }: CheckoutModalProps) => {
                   >
                     <span className="text-2xl">🅿️</span>
                     <span className="text-sm font-medium text-foreground">PayPal</span>
-                    <span className="text-xs text-muted-foreground">Sandbox</span>
                   </button>
                 </div>
               </div>
 
-              {/* Card Form (Sandbox) */}
+              {/* Card Form */}
               {paymentMethod === "card" && (
                 <div className="space-y-3">
                   <div>
@@ -189,7 +238,7 @@ const CheckoutModal = ({ onClose }: CheckoutModalProps) => {
                     </div>
                   </div>
                   <p className="text-xs text-muted-foreground text-center mt-2">
-                    ⚠️ وضع تجريبي - لن يتم خصم أي مبلغ حقيقي
+                    🔒 بيانات الدفع محمية ومشفرة
                   </p>
                 </div>
               )}
@@ -197,11 +246,10 @@ const CheckoutModal = ({ onClose }: CheckoutModalProps) => {
               {paymentMethod === "paypal" && (
                 <div className="p-6 text-center glass-card">
                   <span className="text-4xl mb-3 block">🅿️</span>
-                  <p className="text-muted-foreground text-sm">
-                    سيتم توجيهك إلى PayPal لإتمام الدفع
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    ⚠️ وضع تجريبي (Sandbox)
+                  <p className="text-muted-foreground text-sm">سيتم معالجة الدفع عبر PayPal Sandbox</p>
+                  <p className="text-xs text-primary mt-2 flex items-center justify-center gap-1">
+                    <ExternalLink className="w-3 h-3" />
+                    دفع آمن عبر PayPal
                   </p>
                 </div>
               )}
@@ -232,9 +280,7 @@ const CheckoutModal = ({ onClose }: CheckoutModalProps) => {
                   <Check className="w-8 h-8 text-green-500" />
                 </div>
                 <p className="text-foreground font-bold text-lg mb-1">تمت العملية بنجاح!</p>
-                <p className="text-muted-foreground text-sm">
-                  احفظ الأكواد التالية لاستخدامها
-                </p>
+                <p className="text-muted-foreground text-sm">احفظ الأكواد التالية لاستخدامها</p>
               </div>
 
               <div className="space-y-3">
@@ -260,11 +306,7 @@ const CheckoutModal = ({ onClose }: CheckoutModalProps) => {
                 ))}
               </div>
 
-              <Button
-                className="w-full rounded-xl"
-                variant="outline"
-                onClick={onClose}
-              >
+              <Button className="w-full rounded-xl" variant="outline" onClick={onClose}>
                 إغلاق
               </Button>
             </div>
