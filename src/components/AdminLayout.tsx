@@ -12,7 +12,9 @@ import {
   ChevronLeft,
   Mail,
   Ticket,
-  Key
+  Key,
+  ShoppingCart,
+  Bot
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -119,10 +121,12 @@ const AdminLayout = () => {
   const navItems = [
     { name: "الإحصائيات", href: "/admin", icon: LayoutDashboard },
     { name: "المنتجات", href: "/admin/products", icon: Package },
+    { name: "الطلبات", href: "/admin/orders", icon: ShoppingCart },
     { name: "المستخدمين", href: "/admin/users", icon: Users },
     { name: "الرسائل", href: "/admin/messages", icon: Mail, badge: unreadMessages },
     { name: "تذاكر الدعم", href: "/admin/tickets", icon: Ticket },
     { name: "الأكواد", href: "/admin/codes", icon: Key },
+    { name: "المساعد الذكي", href: "/admin/ai", icon: Bot },
     { name: "الإعدادات", href: "/admin/settings", icon: Settings },
   ];
 
