@@ -4,15 +4,37 @@ import Footer from "@/components/Footer";
 import SnowBackground from "@/components/SnowBackground";
 import CartDrawer from "@/components/CartDrawer";
 import SupportWidget from "@/components/SupportWidget";
+import MaintenancePage from "@/components/MaintenancePage";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { User, CreditCard, ShoppingCart } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { useState, useEffect } from "react";
 
 const Index = () => {
   const { addItem } = useCart();
   const { toast } = useToast();
+  const { settings, loading: settingsLoading } = useSiteSettings();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", session.user.id)
+          .maybeSingle()
+          .then(({ data }) => {
+            if (data && (data.role === "admin" || data.role === "owner")) {
+              setIsAdmin(true);
+            }
+          });
+      }
+    });
+  }, []);
 
   const { data: categories } = useQuery({
     queryKey: ["categories"],
@@ -38,6 +60,11 @@ const Index = () => {
       return data;
     },
   });
+
+  // Show maintenance page for non-admins
+  if (!settingsLoading && settings.maintenance_mode.enabled && !isAdmin) {
+    return <MaintenancePage message={settings.maintenance_mode.message} />;
+  }
 
   const productsByCategory = categories?.reduce((acc, category) => {
     acc[category.id] = products?.filter((p) => p.category_id === category.id) || [];
@@ -71,6 +98,14 @@ const Index = () => {
       <SnowBackground />
       <div className="relative z-10">
         <Header />
+
+        {/* Maintenance banner for admins */}
+        {settings.maintenance_mode.enabled && isAdmin && (
+          <div className="bg-destructive/20 border-b border-destructive/30 text-center py-2 px-4 text-sm text-destructive font-medium">
+            ⚠️ وضع الصيانة مُفعّل - أنت تراه كمدير فقط
+          </div>
+        )}
+
         <HeroBanner />
 
         {/* Products by Category */}
@@ -83,7 +118,6 @@ const Index = () => {
               id={category.icon === "user" ? "usernames" : "subscriptions"}
               className="py-16 container mx-auto px-4"
             >
-              {/* Section Title */}
               <div className="flex items-center justify-center gap-4 mb-12">
                 <div className="h-px flex-1 bg-gradient-to-r from-transparent to-border/50" />
                 <div className="flex items-center gap-3 px-6 py-3 glass-card">
