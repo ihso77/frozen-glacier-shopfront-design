@@ -16,6 +16,7 @@ import AdminTickets from "./pages/admin/AdminTickets";
 import AdminCodes from "./pages/admin/AdminCodes";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminAI from "./pages/admin/AdminAI";
+import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>

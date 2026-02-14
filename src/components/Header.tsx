@@ -98,6 +98,14 @@ const Header = () => {
 
             {user ? (
               <>
+                <Link to="/profile">
+                  <Button 
+                    className="hidden sm:flex h-9 px-4 rounded-xl bg-secondary/50 border border-border text-foreground hover:bg-secondary transition-all duration-300 gap-2"
+                  >
+                    <User className="w-4 h-4" />
+                    حسابي
+                  </Button>
+                </Link>
                 {isAdmin && (
                   <Link to="/admin">
                     <Button 
@@ -152,6 +160,12 @@ const Header = () => {
               ))}
               {user ? (
                 <>
+                  <Link to="/profile" onClick={() => setIsMenuOpen(false)}>
+                    <Button className="w-full mt-2 rounded-xl bg-secondary/50 border border-border text-foreground gap-2">
+                      <User className="w-4 h-4" />
+                      حسابي
+                    </Button>
+                  </Link>
                   {isAdmin && (
                     <Link to="/admin" onClick={() => setIsMenuOpen(false)}>
                       <Button className="w-full mt-2 rounded-xl bg-gradient-to-r from-primary to-accent text-primary-foreground gap-2">
