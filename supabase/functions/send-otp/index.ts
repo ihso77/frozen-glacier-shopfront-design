@@ -3,22 +3,29 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
 serve(async (req) => {
+  // معالجة طلب Preflight (OPTIONS) بشكل صحيح لحل مشكلة CORS
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response('ok', { headers: corsHeaders });
   }
 
   try {
     const { phone, otp } = await req.json();
 
     if (!phone || !otp) {
-      throw new Error('Phone and OTP are required');
+      return new Response(JSON.stringify({ error: 'Phone and OTP are required' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     const WEBEX_TOKEN = 'aky_39lE2225XnRrGIisf2Jp0jvYuzu';
     const WEBEX_API = 'https://api.webexinteract.com/v1/sms';
+
+    console.log(`Sending OTP ${otp} to ${phone}`);
 
     const response = await fetch(WEBEX_API, {
       method: 'POST',
@@ -41,13 +48,21 @@ serve(async (req) => {
 
     if (!response.ok) {
       console.error('Webex API error:', result);
-      throw new Error(result.message || 'Failed to send SMS');
+      return new Response(JSON.stringify({ 
+        error: 'Failed to send SMS via provider', 
+        details: result 
+      }), {
+        status: response.status,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     return new Response(JSON.stringify({ success: true, data: result }), {
+      status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error: any) {
+    console.error('Function error:', error.message);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
