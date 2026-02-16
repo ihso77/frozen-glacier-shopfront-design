@@ -18,7 +18,7 @@ const loginSchema = z.object({
 
 const registerSchema = z.object({
   fullName: z.string().min(2, "الاسم يجب أن يكون حرفين على الأقل").max(100),
-  phone: z.string().min(9, "رقم الجوال غير صحيح"),
+  phone: z.string().min(7, "رقم الجوال غير صحيح"),
   countryCode: z.string().min(1, "كود الدولة مطلوب"),
   gender: z.enum(["male", "female"]).optional(),
   email: z.string().email("البريد الإلكتروني غير صحيح"),
@@ -40,21 +40,18 @@ const AuthPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // التحقق إذا كان المستخدم مسجل
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) navigate("/");
     });
   }, [navigate]);
 
-  // Login form state
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
     rememberMe: false,
   });
 
-  // Register form state
   const [registerData, setRegisterData] = useState({
     fullName: "",
     phone: "",
@@ -84,50 +81,36 @@ const AuthPage = () => {
     }
 
     setLoading(true);
-    
     const { error } = await supabase.auth.signInWithPassword({
       email: loginData.email,
       password: loginData.password,
     });
-
     setLoading(false);
 
     if (error) {
-      if (error.message.includes("Invalid login")) {
-        toast({
-          title: "خطأ في تسجيل الدخول",
-          description: "البريد الإلكتروني أو كلمة المرور غير صحيحة",
-          variant: "destructive",
-        });
-      } else if (error.message.includes("Email not confirmed")) {
-        toast({
-          title: "البريد غير مفعل",
-          description: "يرجى تفعيل بريدك الإلكتروني أولاً",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "خطأ",
-          description: error.message,
-          variant: "destructive",
-        });
-      }
+      toast({
+        title: "خطأ في تسجيل الدخول",
+        description: error.message,
+        variant: "destructive",
+      });
       return;
     }
 
-    toast({
-      title: "مرحباً بك!",
-      description: "تم تسجيل الدخول بنجاح",
-    });
+    toast({ title: "مرحباً بك!", description: "تم تسجيل الدخول بنجاح" });
     navigate("/");
   };
 
   const sendOtp = async () => {
+    setLoading(true);
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     setGeneratedOtp(otp);
     
-    const fullPhone = `${registerData.countryCode}${registerData.phone.replace(/^0+/, '')}`;
+    // تنظيف الرقم: إزالة الأصفار في البداية والمسافات
+    const cleanPhoneInput = registerData.phone.trim().replace(/^0+/, '').replace(/\s+/g, '');
+    const fullPhone = `${registerData.countryCode}${cleanPhoneInput}`;
     
+    console.log("Sending OTP to:", fullPhone);
+
     try {
       const { data, error } = await supabase.functions.invoke('send-otp', {
         body: { phone: fullPhone, otp: otp }
@@ -135,17 +118,24 @@ const AuthPage = () => {
 
       if (error) throw error;
       
+      if (data?.error) {
+        throw new Error(data.error);
+      }
+
       setStep("otp");
       toast({
         title: "تم إرسال الرمز",
         description: "يرجى إدخال رمز التحقق المرسل إلى جوالك",
       });
     } catch (error: any) {
+      console.error("OTP Error:", error);
       toast({
         title: "خطأ في إرسال الرمز",
         description: error.message || "تعذر إرسال رمز التحقق، يرجى المحاولة لاحقاً",
         variant: "destructive",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -155,6 +145,7 @@ const AuthPage = () => {
 
     try {
       registerSchema.parse(registerData);
+      await sendOtp();
     } catch (err) {
       if (err instanceof z.ZodError) {
         const newErrors: Record<string, string> = {};
@@ -162,34 +153,28 @@ const AuthPage = () => {
           if (e.path[0]) newErrors[e.path[0] as string] = e.message;
         });
         setErrors(newErrors);
-        return;
       }
     }
-
-    setLoading(true);
-    await sendOtp();
-    setLoading(false);
   };
 
   const verifyOtpAndRegister = async () => {
     if (userOtp !== generatedOtp) {
       toast({
         title: "رمز غير صحيح",
-        description: "رمز التحقق الذي أدخلته غير صحيح، يرجى المحاولة مرة أخرى",
+        description: "رمز التحقق الذي أدخلته غير صحيح",
         variant: "destructive",
       });
       return;
     }
 
     setLoading(true);
-    const redirectUrl = `${window.location.origin}/`;
-    const fullPhone = `${registerData.countryCode}${registerData.phone.replace(/^0+/, '')}`;
+    const cleanPhoneInput = registerData.phone.trim().replace(/^0+/, '').replace(/\s+/g, '');
+    const fullPhone = `${registerData.countryCode}${cleanPhoneInput}`;
 
     const { error } = await supabase.auth.signUp({
       email: registerData.email,
       password: registerData.password,
       options: {
-        emailRedirectTo: redirectUrl,
         data: {
           full_name: registerData.fullName,
           phone: fullPhone,
@@ -201,34 +186,17 @@ const AuthPage = () => {
     setLoading(false);
 
     if (error) {
-      if (error.message.includes("already registered")) {
-        toast({
-          title: "خطأ",
-          description: "هذا البريد الإلكتروني مسجل مسبقاً",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "خطأ",
-          description: error.message,
-          variant: "destructive",
-        });
-      }
+      toast({ title: "خطأ", description: error.message, variant: "destructive" });
       return;
     }
 
     toast({
       title: "تم إنشاء الحساب!",
-      description: "تم إرسال رسالة تحقق إلى بريدك الإلكتروني. يرجى التحقق لتفعيل حسابك.",
+      description: "يرجى التحقق من بريدك الإلكتروني لتفعيل الحساب.",
     });
-    
     setIsLogin(true);
     setStep("details");
   };
-
-  const features = [
-    { icon: Shield, title: "حماية متقدمة", desc: "تشفير عالي المستوى لحماية بياناتك" },
-  ];
 
   const countryCodes = [
     { code: "+966", name: "السعودية", flag: "🇸🇦" },
@@ -245,34 +213,24 @@ const AuthPage = () => {
   return (
     <div className="min-h-screen bg-background flex relative">
       <SnowBackground />
-      
-      {/* Left Side - Features */}
       <div className="hidden lg:flex flex-1 items-center justify-center p-12 relative z-10">
-        <div className="relative z-10 max-w-md space-y-8">
-          {/* شعار كبير */}
-          <div className="text-center mb-12">
-            <div className="w-24 h-24 mx-auto rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 flex items-center justify-center mb-6 shadow-lg shadow-primary/20">
-              <span className="text-5xl">❄️</span>
-            </div>
-            <h2 className="text-4xl font-bold frozen-logo mb-4">فروزن</h2>
-            <p className="text-muted-foreground">متجرك الموثوق للخدمات الرقمية</p>
+        <div className="relative z-10 max-w-md space-y-8 text-center">
+          <div className="w-24 h-24 mx-auto rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 flex items-center justify-center mb-6 shadow-lg shadow-primary/20">
+            <span className="text-5xl">❄️</span>
           </div>
-
-          {features.map((feature, i) => (
-            <div key={i} className="glass-card p-6 flex flex-col items-center text-center">
-              <feature.icon className="w-10 h-10 text-primary mb-4" />
-              <h3 className="font-bold text-lg text-foreground mb-2">{feature.title}</h3>
-              <p className="text-muted-foreground text-sm">{feature.desc}</p>
-            </div>
-          ))}
+          <h2 className="text-4xl font-bold frozen-logo mb-4">فروزن</h2>
+          <p className="text-muted-foreground">متجرك الموثوق للخدمات الرقمية</p>
+          <div className="glass-card p-6 flex flex-col items-center text-center">
+            <Shield className="w-10 h-10 text-primary mb-4" />
+            <h3 className="font-bold text-lg text-foreground mb-2">حماية متقدمة</h3>
+            <p className="text-muted-foreground text-sm">تشفير عالي المستوى لحماية بياناتك</p>
+          </div>
         </div>
       </div>
 
-      {/* Right Side - Auth Form */}
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12 relative z-10">
         <div className="w-full max-w-md">
           <div className="glass-card p-8 lg:p-10">
-            {/* Logo */}
             <div className="text-center mb-8">
               <Link to="/" className="inline-flex items-center gap-2 mb-6 group">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 flex items-center justify-center shadow-lg shadow-primary/20 group-hover:shadow-primary/40 transition-all duration-300">
@@ -289,12 +247,10 @@ const AuthPage = () => {
             </div>
 
             {isLogin ? (
-              /* Login Form */
               <form onSubmit={handleLogin} className="space-y-5">
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-                    <Mail className="w-4 h-4 text-primary" />
-                    البريد الإلكتروني
+                    <Mail className="w-4 h-4 text-primary" /> البريد الإلكتروني
                   </label>
                   <input
                     type="email"
@@ -306,11 +262,9 @@ const AuthPage = () => {
                   />
                   {errors.email && <p className="text-destructive text-xs mt-1">{errors.email}</p>}
                 </div>
-
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-                    <Lock className="w-4 h-4 text-primary" />
-                    كلمة المرور
+                    <Lock className="w-4 h-4 text-primary" /> كلمة المرور
                   </label>
                   <input
                     type="password"
@@ -322,83 +276,34 @@ const AuthPage = () => {
                   />
                   {errors.password && <p className="text-destructive text-xs mt-1">{errors.password}</p>}
                 </div>
-
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 rounded border-border bg-secondary accent-primary"
-                      checked={loginData.rememberMe}
-                      onChange={(e) => setLoginData({ ...loginData, rememberMe: e.target.checked })}
-                    />
-                    تذكرني
-                  </label>
-                  <button type="button" className="text-sm text-primary hover:text-primary/80 transition-colors">
-                    نسيت كلمة المرور؟
-                  </button>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="auth-button-primary flex items-center justify-center gap-2"
-                >
-                  {loading ? "جاري التحميل..." : "تسجيل الدخول"}
-                  <ArrowLeft className="w-4 h-4" />
+                <button type="submit" disabled={loading} className="auth-button-primary flex items-center justify-center gap-2">
+                  {loading ? "جاري التحميل..." : "تسجيل الدخول"} <ArrowLeft className="w-4 h-4" />
                 </button>
               </form>
             ) : step === "otp" ? (
-              /* OTP Verification Form */
               <div className="space-y-6">
                 <div className="flex flex-col items-center justify-center space-y-4">
-                  <InputOTP
-                    maxLength={6}
-                    value={userOtp}
-                    onChange={(value) => setUserOtp(value)}
-                  >
+                  <InputOTP maxLength={6} value={userOtp} onChange={(value) => setUserOtp(value)}>
                     <InputOTPGroup className="gap-2">
-                      <InputOTPSlot index={0} className="rounded-lg border-2" />
-                      <InputOTPSlot index={1} className="rounded-lg border-2" />
-                      <InputOTPSlot index={2} className="rounded-lg border-2" />
-                      <InputOTPSlot index={3} className="rounded-lg border-2" />
-                      <InputOTPSlot index={4} className="rounded-lg border-2" />
-                      <InputOTPSlot index={5} className="rounded-lg border-2" />
+                      {[0, 1, 2, 3, 4, 5].map((i) => (
+                        <InputOTPSlot key={i} index={i} className="rounded-lg border-2" />
+                      ))}
                     </InputOTPGroup>
                   </InputOTP>
                   <p className="text-sm text-muted-foreground">
-                    لم يصلك الرمز؟{" "}
-                    <button 
-                      onClick={sendOtp}
-                      className="text-primary hover:underline font-medium"
-                    >
-                      إعادة الإرسال
-                    </button>
+                    لم يصلك الرمز؟ <button onClick={sendOtp} className="text-primary hover:underline font-medium">إعادة الإرسال</button>
                   </p>
                 </div>
-
-                <button
-                  onClick={verifyOtpAndRegister}
-                  disabled={loading || userOtp.length !== 6}
-                  className="auth-button-primary flex items-center justify-center gap-2"
-                >
-                  {loading ? "جاري التحقق..." : "تحقق وإنشاء الحساب"}
-                  <CheckCircle2 className="w-4 h-4" />
+                <button onClick={verifyOtpAndRegister} disabled={loading || userOtp.length !== 6} className="auth-button-primary flex items-center justify-center gap-2">
+                  {loading ? "جاري التحقق..." : "تحقق وإنشاء الحساب"} <CheckCircle2 className="w-4 h-4" />
                 </button>
-                
-                <button
-                  onClick={() => setStep("details")}
-                  className="w-full text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  تعديل رقم الجوال
-                </button>
+                <button onClick={() => setStep("details")} className="w-full text-sm text-muted-foreground hover:text-foreground transition-colors">تعديل رقم الجوال</button>
               </div>
             ) : (
-              /* Register Form */
               <form onSubmit={handleRegisterSubmit} className="space-y-4">
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-                    <User className="w-4 h-4 text-primary" />
-                    الاسم الكامل
+                    <User className="w-4 h-4 text-primary" /> الاسم الكامل
                   </label>
                   <input
                     type="text"
@@ -409,11 +314,9 @@ const AuthPage = () => {
                   />
                   {errors.fullName && <p className="text-destructive text-xs mt-1">{errors.fullName}</p>}
                 </div>
-
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-                    <Phone className="w-4 h-4 text-primary" />
-                    رقم الجوال
+                    <Phone className="w-4 h-4 text-primary" /> رقم الجوال
                   </label>
                   <div className="flex gap-2">
                     <select
@@ -422,9 +325,7 @@ const AuthPage = () => {
                       onChange={(e) => setRegisterData({ ...registerData, countryCode: e.target.value })}
                     >
                       {countryCodes.map((c) => (
-                        <option key={c.code} value={c.code}>
-                          {c.flag} {c.code}
-                        </option>
+                        <option key={c.code} value={c.code}>{c.flag} {c.code}</option>
                       ))}
                     </select>
                     <input
@@ -438,42 +339,9 @@ const AuthPage = () => {
                   </div>
                   {errors.phone && <p className="text-destructive text-xs mt-1">{errors.phone}</p>}
                 </div>
-
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-                    <User className="w-4 h-4 text-primary" />
-                    الجنس
-                  </label>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setRegisterData({ ...registerData, gender: "male" })}
-                      className={`h-12 rounded-xl border transition-all duration-300 flex items-center justify-center gap-2 ${
-                        registerData.gender === "male"
-                          ? "border-primary bg-primary/10 text-foreground shadow-lg shadow-primary/10"
-                          : "border-border bg-secondary/50 text-muted-foreground hover:border-primary/50"
-                      }`}
-                    >
-                      👨 ذكر
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setRegisterData({ ...registerData, gender: "female" })}
-                      className={`h-12 rounded-xl border transition-all duration-300 flex items-center justify-center gap-2 ${
-                        registerData.gender === "female"
-                          ? "border-primary bg-primary/10 text-foreground shadow-lg shadow-primary/10"
-                          : "border-border bg-secondary/50 text-muted-foreground hover:border-primary/50"
-                      }`}
-                    >
-                      👩 أنثى
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-                    <Mail className="w-4 h-4 text-primary" />
-                    البريد الإلكتروني
+                    <Mail className="w-4 h-4 text-primary" /> البريد الإلكتروني
                   </label>
                   <input
                     type="email"
@@ -485,11 +353,9 @@ const AuthPage = () => {
                   />
                   {errors.email && <p className="text-destructive text-xs mt-1">{errors.email}</p>}
                 </div>
-
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-                    <Lock className="w-4 h-4 text-primary" />
-                    كلمة المرور
+                    <Lock className="w-4 h-4 text-primary" /> كلمة المرور
                   </label>
                   <input
                     type="password"
@@ -501,11 +367,9 @@ const AuthPage = () => {
                   />
                   {errors.password && <p className="text-destructive text-xs mt-1">{errors.password}</p>}
                 </div>
-
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
-                    <Lock className="w-4 h-4 text-primary" />
-                    تأكيد كلمة المرور
+                    <Lock className="w-4 h-4 text-primary" /> تأكيد كلمة المرور
                   </label>
                   <input
                     type="password"
@@ -517,7 +381,6 @@ const AuthPage = () => {
                   />
                   {errors.confirmPassword && <p className="text-destructive text-xs mt-1">{errors.confirmPassword}</p>}
                 </div>
-
                 <div className="flex items-center gap-2">
                   <input
                     type="checkbox"
@@ -527,38 +390,19 @@ const AuthPage = () => {
                     onChange={(e) => setRegisterData({ ...registerData, agreeTerms: e.target.checked })}
                   />
                   <label htmlFor="terms" className="text-sm text-muted-foreground">
-                    أوافق على{" "}
-                    <span className="text-primary cursor-pointer hover:underline">سياسة الخدمة</span>
-                    {" "}و{" "}
-                    <span className="text-primary cursor-pointer hover:underline">سياسة الإرجاع</span>
+                    أوافق على <span className="text-primary cursor-pointer hover:underline">سياسة الخدمة</span> و <span className="text-primary cursor-pointer hover:underline">سياسة الإرجاع</span>
                   </label>
                 </div>
                 {errors.agreeTerms && <p className="text-destructive text-xs">{errors.agreeTerms}</p>}
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="auth-button-primary flex items-center justify-center gap-2"
-                >
-                  {loading ? "جاري التحميل..." : "إنشاء الحساب"}
-                  <ArrowLeft className="w-4 h-4" />
+                <button type="submit" disabled={loading} className="auth-button-primary flex items-center justify-center gap-2">
+                  {loading ? "جاري التحميل..." : "إنشاء الحساب"} <ArrowLeft className="w-4 h-4" />
                 </button>
               </form>
             )}
 
-            {/* Toggle Auth Mode */}
             <div className="mt-8 text-center border-t border-border pt-6">
-              <p className="text-muted-foreground text-sm mb-3">
-                {isLogin ? "ليس لديك حساب؟" : "لديك حساب بالفعل؟"}
-              </p>
-              <button
-                onClick={() => {
-                  setIsLogin(!isLogin);
-                  setErrors({});
-                  setStep("details");
-                }}
-                className="auth-button-secondary"
-              >
+              <p className="text-muted-foreground text-sm mb-3">{isLogin ? "ليس لديك حساب؟" : "لديك حساب بالفعل؟"}</p>
+              <button onClick={() => { setIsLogin(!isLogin); setErrors({}); setStep("details"); }} className="auth-button-secondary">
                 {isLogin ? "إنشاء حساب جديد" : "تسجيل الدخول"}
               </button>
             </div>

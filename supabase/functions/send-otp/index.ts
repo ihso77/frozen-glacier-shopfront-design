@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  // معالجة طلب Preflight (OPTIONS) بشكل صحيح لحل مشكلة CORS
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
@@ -22,10 +22,13 @@ serve(async (req) => {
       });
     }
 
+    // تنظيف رقم الجوال: إزالة أي مسافات أو رموز غير رقمية (ما عدا +)
+    const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
+
     const WEBEX_TOKEN = 'aky_39lE2225XnRrGIisf2Jp0jvYuzu';
     const WEBEX_API = 'https://api.webexinteract.com/v1/sms';
 
-    console.log(`Sending OTP ${otp} to ${phone}`);
+    console.log(`Attempting to send OTP ${otp} to ${cleanPhone}`);
 
     const response = await fetch(WEBEX_API, {
       method: 'POST',
@@ -38,7 +41,7 @@ serve(async (req) => {
         from: 'FrozenStore',
         to: [
           {
-            phone: [phone]
+            phone: [cleanPhone]
           }
         ]
       }),
@@ -52,7 +55,7 @@ serve(async (req) => {
         error: 'Failed to send SMS via provider', 
         details: result 
       }), {
-        status: response.status,
+        status: 200, // نرجع 200 حتى لا يسبب مشاكل في الـ Fetch بالفرونت إند، لكن مع رسالة خطأ
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
@@ -64,7 +67,7 @@ serve(async (req) => {
   } catch (error: any) {
     console.error('Function error:', error.message);
     return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
+      status: 200, // نرجع 200 لضمان وصول رسالة الخطأ للفرونت إند
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
