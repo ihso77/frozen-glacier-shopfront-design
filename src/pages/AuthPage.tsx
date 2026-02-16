@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Mail, Lock, User, Phone, Shield, ArrowLeft } from "lucide-react";
+import { Mail, Lock, User, Phone, Shield, ArrowLeft, CheckCircle2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import SnowBackground from "@/components/SnowBackground";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 
 const loginSchema = z.object({
   email: z.string().email("البريد الإلكتروني غير صحيح"),
@@ -13,7 +18,8 @@ const loginSchema = z.object({
 
 const registerSchema = z.object({
   fullName: z.string().min(2, "الاسم يجب أن يكون حرفين على الأقل").max(100),
-  phone: z.string().optional(),
+  phone: z.string().min(9, "رقم الجوال غير صحيح"),
+  countryCode: z.string().min(1, "كود الدولة مطلوب"),
   gender: z.enum(["male", "female"]).optional(),
   email: z.string().email("البريد الإلكتروني غير صحيح"),
   password: z.string().min(6, "كلمة المرور يجب أن تكون 6 أحرف على الأقل"),
@@ -28,6 +34,9 @@ const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [step, setStep] = useState<"details" | "otp">("details");
+  const [generatedOtp, setGeneratedOtp] = useState("");
+  const [userOtp, setUserOtp] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -49,6 +58,7 @@ const AuthPage = () => {
   const [registerData, setRegisterData] = useState({
     fullName: "",
     phone: "",
+    countryCode: "+966",
     gender: "" as "male" | "female" | "",
     email: "",
     password: "",
@@ -112,7 +122,34 @@ const AuthPage = () => {
     navigate("/");
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const sendOtp = async () => {
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    setGeneratedOtp(otp);
+    
+    const fullPhone = `${registerData.countryCode}${registerData.phone.replace(/^0+/, '')}`;
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('send-otp', {
+        body: { phone: fullPhone, otp: otp }
+      });
+
+      if (error) throw error;
+      
+      setStep("otp");
+      toast({
+        title: "تم إرسال الرمز",
+        description: "يرجى إدخال رمز التحقق المرسل إلى جوالك",
+      });
+    } catch (error: any) {
+      toast({
+        title: "خطأ في إرسال الرمز",
+        description: error.message || "تعذر إرسال رمز التحقق، يرجى المحاولة لاحقاً",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
 
@@ -130,24 +167,40 @@ const AuthPage = () => {
     }
 
     setLoading(true);
+    await sendOtp();
+    setLoading(false);
+  };
 
+  const verifyOtpAndRegister = async () => {
+    if (userOtp !== generatedOtp) {
+      toast({
+        title: "رمز غير صحيح",
+        description: "رمز التحقق الذي أدخلته غير صحيح، يرجى المحاولة مرة أخرى",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
     const redirectUrl = `${window.location.origin}/`;
+    const fullPhone = `${registerData.countryCode}${registerData.phone.replace(/^0+/, '')}`;
 
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email: registerData.email,
       password: registerData.password,
       options: {
         emailRedirectTo: redirectUrl,
         data: {
           full_name: registerData.fullName,
-          phone: registerData.phone,
+          phone: fullPhone,
           gender: registerData.gender || null,
         },
       },
     });
 
+    setLoading(false);
+
     if (error) {
-      setLoading(false);
       if (error.message.includes("already registered")) {
         toast({
           title: "خطأ",
@@ -164,20 +217,29 @@ const AuthPage = () => {
       return;
     }
 
-    // Profile and role are now created automatically via database trigger
-
-    setLoading(false);
-
     toast({
       title: "تم إنشاء الحساب!",
       description: "تم إرسال رسالة تحقق إلى بريدك الإلكتروني. يرجى التحقق لتفعيل حسابك.",
     });
     
     setIsLogin(true);
+    setStep("details");
   };
 
   const features = [
     { icon: Shield, title: "حماية متقدمة", desc: "تشفير عالي المستوى لحماية بياناتك" },
+  ];
+
+  const countryCodes = [
+    { code: "+966", name: "السعودية", flag: "🇸🇦" },
+    { code: "+971", name: "الإمارات", flag: "🇦🇪" },
+    { code: "+965", name: "الكويت", flag: "🇰🇼" },
+    { code: "+974", name: "قطر", flag: "🇶🇦" },
+    { code: "+973", name: "البحرين", flag: "🇧🇭" },
+    { code: "+968", name: "عمان", flag: "🇴🇲" },
+    { code: "+962", name: "الأردن", flag: "🇯🇴" },
+    { code: "+964", name: "العراق", flag: "🇮🇶" },
+    { code: "+20", name: "مصر", flag: "🇪🇬" },
   ];
 
   return (
@@ -219,10 +281,10 @@ const AuthPage = () => {
                 <span className="text-2xl font-black frozen-logo">فروزن</span>
               </Link>
               <h1 className="text-2xl font-bold text-foreground mb-2">
-                {isLogin ? "مرحباً بعودتك" : "إنشاء حساب جديد"}
+                {isLogin ? "مرحباً بعودتك" : step === "otp" ? "التحقق من الجوال" : "إنشاء حساب جديد"}
               </h1>
               <p className="text-muted-foreground text-sm">
-                {isLogin ? "سجل دخولك للوصول إلى حسابك" : "انضم إلى متجر فروزن الآن"}
+                {isLogin ? "سجل دخولك للوصول إلى حسابك" : step === "otp" ? "أدخل الرمز المرسل إلى جوالك" : "انضم إلى متجر فروزن الآن"}
               </p>
             </div>
 
@@ -285,9 +347,54 @@ const AuthPage = () => {
                   <ArrowLeft className="w-4 h-4" />
                 </button>
               </form>
+            ) : step === "otp" ? (
+              /* OTP Verification Form */
+              <div className="space-y-6">
+                <div className="flex flex-col items-center justify-center space-y-4">
+                  <InputOTP
+                    maxLength={6}
+                    value={userOtp}
+                    onChange={(value) => setUserOtp(value)}
+                  >
+                    <InputOTPGroup className="gap-2">
+                      <InputOTPSlot index={0} className="rounded-lg border-2" />
+                      <InputOTPSlot index={1} className="rounded-lg border-2" />
+                      <InputOTPSlot index={2} className="rounded-lg border-2" />
+                      <InputOTPSlot index={3} className="rounded-lg border-2" />
+                      <InputOTPSlot index={4} className="rounded-lg border-2" />
+                      <InputOTPSlot index={5} className="rounded-lg border-2" />
+                    </InputOTPGroup>
+                  </InputOTP>
+                  <p className="text-sm text-muted-foreground">
+                    لم يصلك الرمز؟{" "}
+                    <button 
+                      onClick={sendOtp}
+                      className="text-primary hover:underline font-medium"
+                    >
+                      إعادة الإرسال
+                    </button>
+                  </p>
+                </div>
+
+                <button
+                  onClick={verifyOtpAndRegister}
+                  disabled={loading || userOtp.length !== 6}
+                  className="auth-button-primary flex items-center justify-center gap-2"
+                >
+                  {loading ? "جاري التحقق..." : "تحقق وإنشاء الحساب"}
+                  <CheckCircle2 className="w-4 h-4" />
+                </button>
+                
+                <button
+                  onClick={() => setStep("details")}
+                  className="w-full text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  تعديل رقم الجوال
+                </button>
+              </div>
             ) : (
               /* Register Form */
-              <form onSubmit={handleRegister} className="space-y-4">
+              <form onSubmit={handleRegisterSubmit} className="space-y-4">
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground mb-2">
                     <User className="w-4 h-4 text-primary" />
@@ -308,14 +415,28 @@ const AuthPage = () => {
                     <Phone className="w-4 h-4 text-primary" />
                     رقم الجوال
                   </label>
-                  <input
-                    type="tel"
-                    className="auth-input"
-                    placeholder="512345678"
-                    value={registerData.phone}
-                    onChange={(e) => setRegisterData({ ...registerData, phone: e.target.value })}
-                    dir="ltr"
-                  />
+                  <div className="flex gap-2">
+                    <select
+                      className="auth-input w-32 px-2"
+                      value={registerData.countryCode}
+                      onChange={(e) => setRegisterData({ ...registerData, countryCode: e.target.value })}
+                    >
+                      {countryCodes.map((c) => (
+                        <option key={c.code} value={c.code}>
+                          {c.flag} {c.code}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      type="tel"
+                      className="auth-input flex-1"
+                      placeholder="512345678"
+                      value={registerData.phone}
+                      onChange={(e) => setRegisterData({ ...registerData, phone: e.target.value })}
+                      dir="ltr"
+                    />
+                  </div>
+                  {errors.phone && <p className="text-destructive text-xs mt-1">{errors.phone}</p>}
                 </div>
 
                 <div>
@@ -434,6 +555,7 @@ const AuthPage = () => {
                 onClick={() => {
                   setIsLogin(!isLogin);
                   setErrors({});
+                  setStep("details");
                 }}
                 className="auth-button-secondary"
               >
