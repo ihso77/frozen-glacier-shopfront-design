@@ -70,11 +70,11 @@ export const useSiteSettings = () => {
 };
 
 export const THEME_PRESETS: Record<string, { name: string; primary: string; accent: string; emoji: string }> = {
-  ice: { name: "جليدي", primary: "195 100% 50%", accent: "180 100% 45%", emoji: "❄️" },
+  purple: { name: "بنفسجي", primary: "270 80% 65%", accent: "290 70% 60%", emoji: "💜" },
+  nova: { name: "نوفا", primary: "270 90% 55%", accent: "310 70% 55%", emoji: "✦" },
   ocean: { name: "محيطي", primary: "210 100% 50%", accent: "200 90% 55%", emoji: "🌊" },
   sunset: { name: "غروب", primary: "25 95% 55%", accent: "350 85% 55%", emoji: "🌅" },
   forest: { name: "غابة", primary: "150 80% 40%", accent: "170 70% 45%", emoji: "🌲" },
-  purple: { name: "بنفسجي", primary: "270 80% 55%", accent: "290 70% 50%", emoji: "💜" },
   gold: { name: "ذهبي", primary: "45 90% 50%", accent: "35 85% 45%", emoji: "✨" },
   rose: { name: "وردي", primary: "340 80% 55%", accent: "320 70% 50%", emoji: "🌸" },
   neon: { name: "نيون", primary: "160 100% 45%", accent: "130 100% 50%", emoji: "⚡" },

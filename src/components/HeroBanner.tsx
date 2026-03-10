@@ -97,8 +97,8 @@ const HeroBanner = () => {
                 </div>
                 <div className="absolute -bottom-4 -left-4 glass-card p-3 rounded-xl animate-float" style={{ animationDelay: "1.5s", animationDuration: "6s" }}>
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
-                      <span className="text-green-400 text-sm">✓</span>
+                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                      <span className="text-primary text-sm">✓</span>
                     </div>
                     <div>
                       <p className="text-xs font-medium text-foreground">تم التسليم</p>
