@@ -10,7 +10,7 @@ const HeroBanner = () => {
       
       {/* Animated Grid */}
       <div className="absolute inset-0 opacity-[0.03]" style={{
-        backgroundImage: 'linear-gradient(hsl(195 100% 50% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(195 100% 50% / 0.3) 1px, transparent 1px)',
+        backgroundImage: 'linear-gradient(hsl(270 80% 65% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(270 80% 65% / 0.3) 1px, transparent 1px)',
         backgroundSize: '60px 60px',
       }} />
 
