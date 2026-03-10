@@ -55,10 +55,10 @@ const AdminUsers = () => {
 
   const getRoleIcon = (role: string) => {
     switch (role) {
-      case "owner": return <Crown className="w-4 h-4 text-yellow-500" />;
+      case "owner": return <Crown className="w-4 h-4 text-accent" />;
       case "admin": return <Shield className="w-4 h-4 text-primary" />;
-      case "customer": return <ShoppingCart className="w-4 h-4 text-green-500" />;
-      case "vip_customer": return <Star className="w-4 h-4 text-amber-500" />;
+      case "customer": return <ShoppingCart className="w-4 h-4 text-primary" />;
+      case "vip_customer": return <Star className="w-4 h-4 text-accent" />;
       default: return <User className="w-4 h-4 text-muted-foreground" />;
     }
   };
