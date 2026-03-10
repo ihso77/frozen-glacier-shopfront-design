@@ -103,7 +103,7 @@ const AdminOrders = () => {
                     <div className="flex items-center gap-1">
                       <code className="text-xs font-mono text-muted-foreground" dir="ltr">{order.redemption_code}</code>
                       <button onClick={() => copyCode(order.redemption_code)} className="text-muted-foreground hover:text-primary">
-                        {copiedCode === order.redemption_code ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3" />}
+                        {copiedCode === order.redemption_code ? <Check className="w-3 h-3 text-primary" /> : <Copy className="w-3 h-3" />}
                       </button>
                     </div>
                   </td>
