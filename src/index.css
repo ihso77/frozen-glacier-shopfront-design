@@ -175,16 +175,16 @@
     @apply btn-slim bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20;
   }
 
-  /* رقاقة الثلج المحسنة */
+  /* جزيئات Nova */
   .snowflake {
     position: absolute;
-    color: hsl(195 100% 90% / 0.15);
+    color: hsl(270 80% 80% / 0.15);
     pointer-events: none;
     animation: snowfall linear infinite;
   }
 
   .snowflake::before {
-    content: '❄';
+    content: '✦';
     font-size: inherit;
   }
 }
