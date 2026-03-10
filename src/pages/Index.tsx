@@ -210,7 +210,7 @@ const Index = () => {
         {(!categories || categories.length === 0) && (
           <section className="py-16 container mx-auto px-4">
             <div className="glass-card p-12 text-center">
-              <div className="text-5xl mb-4 opacity-50">❄️</div>
+              <div className="text-5xl mb-4 opacity-50">✦</div>
               <p className="text-muted-foreground">جاري تحميل الأقسام...</p>
             </div>
           </section>
