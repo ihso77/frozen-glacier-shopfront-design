@@ -73,10 +73,10 @@ const AdminUsers = () => {
 
   const getRoleBadgeClass = (role: string) => {
     const map: Record<string, string> = {
-      owner: "bg-yellow-500/20 text-yellow-500",
+      owner: "bg-accent/20 text-accent",
       admin: "bg-primary/20 text-primary",
-      customer: "bg-green-500/20 text-green-500",
-      vip_customer: "bg-amber-500/20 text-amber-500",
+      customer: "bg-primary/20 text-primary",
+      vip_customer: "bg-accent/20 text-accent",
     };
     return map[role] || "bg-secondary text-muted-foreground";
   };
