@@ -216,9 +216,9 @@ const AuthPage = () => {
       <div className="hidden lg:flex flex-1 items-center justify-center p-12 relative z-10">
         <div className="relative z-10 max-w-md space-y-8 text-center">
           <div className="w-24 h-24 mx-auto rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 flex items-center justify-center mb-6 shadow-lg shadow-primary/20">
-            <span className="text-5xl">❄️</span>
+            <span className="text-5xl">✦</span>
           </div>
-          <h2 className="text-4xl font-bold frozen-logo mb-4">فروزن</h2>
+          <h2 className="text-4xl font-bold frozen-logo mb-4">Nova Store</h2>
           <p className="text-muted-foreground">متجرك الموثوق للخدمات الرقمية</p>
           <div className="glass-card p-6 flex flex-col items-center text-center">
             <Shield className="w-10 h-10 text-primary mb-4" />
@@ -234,15 +234,15 @@ const AuthPage = () => {
             <div className="text-center mb-8">
               <Link to="/" className="inline-flex items-center gap-2 mb-6 group">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 flex items-center justify-center shadow-lg shadow-primary/20 group-hover:shadow-primary/40 transition-all duration-300">
-                  <span className="text-2xl">❄️</span>
+                  <span className="text-2xl">✦</span>
                 </div>
-                <span className="text-2xl font-black frozen-logo">فروزن</span>
+                <span className="text-2xl font-black frozen-logo">Nova Store</span>
               </Link>
               <h1 className="text-2xl font-bold text-foreground mb-2">
                 {isLogin ? "مرحباً بعودتك" : step === "otp" ? "التحقق من الجوال" : "إنشاء حساب جديد"}
               </h1>
               <p className="text-muted-foreground text-sm">
-                {isLogin ? "سجل دخولك للوصول إلى حسابك" : step === "otp" ? "أدخل الرمز المرسل إلى جوالك" : "انضم إلى متجر فروزن الآن"}
+                {isLogin ? "سجل دخولك للوصول إلى حسابك" : step === "otp" ? "أدخل الرمز المرسل إلى جوالك" : "انضم إلى Nova Store الآن"}
               </p>
             </div>
 

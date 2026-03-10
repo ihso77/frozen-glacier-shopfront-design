@@ -42,8 +42,8 @@ const defaultSeo = {
 const AdminSettings = () => {
   const [settings, setSettings] = useState<SiteSettings>({
     maintenance_mode: { enabled: false, message: "الموقع تحت الصيانة حالياً، سنعود قريباً!" },
-    site_theme: { primary_color: "195 100% 50%", accent_color: "180 100% 45%", preset: "ice" },
-    site_info: { name: "فروزن", description: "متجر لبيع اليوزرات والاشتراكات" },
+    site_theme: { primary_color: "270 80% 65%", accent_color: "290 70% 60%", preset: "purple" },
+    site_info: { name: "Nova Store", description: "متجر لبيع اليوزرات والاشتراكات" },
     site_features: defaultFeatures,
     site_seo: defaultSeo,
   });
@@ -207,7 +207,7 @@ const AdminSettings = () => {
         <div className="glass-card p-6 space-y-4">
           <h3 className="font-semibold text-foreground mb-2">ميزات الموقع</h3>
           {[
-            { key: "snow_effect", label: "تأثير الثلج ❄️", desc: "عرض رقاقات الثلج المتساقطة على الموقع" },
+            { key: "snow_effect", label: "تأثير الجزيئات ✦", desc: "عرض جزيئات متساقطة على الموقع" },
             { key: "support_widget", label: "ويدجت الدعم 💬", desc: "عرض زر الدعم الفني للزوار" },
             { key: "show_badges", label: "شارات المنتجات 🏷️", desc: "عرض شارات مثل 'جديد' و'خصم' على المنتجات" },
             { key: "show_original_price", label: "السعر الأصلي 💰", desc: "عرض السعر قبل الخصم مشطوب" },
