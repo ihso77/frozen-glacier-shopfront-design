@@ -42,8 +42,8 @@ const defaultSeo = {
 const AdminSettings = () => {
   const [settings, setSettings] = useState<SiteSettings>({
     maintenance_mode: { enabled: false, message: "الموقع تحت الصيانة حالياً، سنعود قريباً!" },
-    site_theme: { primary_color: "195 100% 50%", accent_color: "180 100% 45%", preset: "ice" },
-    site_info: { name: "فروزن", description: "متجر لبيع اليوزرات والاشتراكات" },
+    site_theme: { primary_color: "270 80% 65%", accent_color: "290 70% 60%", preset: "purple" },
+    site_info: { name: "Nova Store", description: "متجر لبيع اليوزرات والاشتراكات" },
     site_features: defaultFeatures,
     site_seo: defaultSeo,
   });
