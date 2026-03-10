@@ -151,7 +151,7 @@ const AdminTickets = () => {
                     <span
                       className={`px-2 py-0.5 text-xs rounded-full ${
                         ticket.status === "open"
-                          ? "bg-green-500/20 text-green-500"
+                          ? "bg-primary/20 text-primary"
                           : "bg-muted text-muted-foreground"
                       }`}
                     >

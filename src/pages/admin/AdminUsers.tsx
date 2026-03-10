@@ -107,10 +107,10 @@ const AdminUsers = () => {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         {[
           { label: "الكل", count: users.length, color: "text-foreground" },
-          { label: "المالك", count: users.filter(u => u.role === "owner").length, color: "text-yellow-500" },
+          { label: "المالك", count: users.filter(u => u.role === "owner").length, color: "text-accent" },
           { label: "المديرين", count: users.filter(u => u.role === "admin").length, color: "text-primary" },
-          { label: "العملاء", count: users.filter(u => u.role === "customer").length, color: "text-green-500" },
-          { label: "VIP", count: users.filter(u => u.role === "vip_customer").length, color: "text-amber-500" },
+          { label: "العملاء", count: users.filter(u => u.role === "customer").length, color: "text-primary" },
+          { label: "VIP", count: users.filter(u => u.role === "vip_customer").length, color: "text-accent" },
         ].map((s, i) => (
           <div key={i} className="glass-card p-3 text-center">
             <p className={`text-xl font-bold ${s.color}`}>{s.count}</p>

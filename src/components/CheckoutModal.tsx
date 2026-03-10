@@ -296,7 +296,7 @@ const CheckoutModal = ({ onClose }: CheckoutModalProps) => {
                         className="p-2 rounded-lg hover:bg-secondary/50 transition-colors text-muted-foreground hover:text-primary"
                       >
                         {copiedCode === order.code ? (
-                          <Check className="w-4 h-4 text-green-500" />
+                          <Check className="w-4 h-4 text-primary" />
                         ) : (
                           <Copy className="w-4 h-4" />
                         )}

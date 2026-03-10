@@ -233,7 +233,7 @@ const ProfilePage = () => {
                       <div className="flex items-center justify-between text-xs text-muted-foreground">
                         <span>{new Date(order.created_at).toLocaleDateString("ar-SA")}</span>
                         <span className={`px-2 py-0.5 rounded-full ${
-                          order.payment_status === "completed" ? "bg-green-500/20 text-green-500" : "bg-yellow-500/20 text-yellow-500"
+                          order.payment_status === "completed" ? "bg-primary/20 text-primary" : "bg-accent/20 text-accent"
                         }`}>
                           {order.payment_status === "completed" ? "مكتمل" : order.payment_status}
                         </span>

@@ -107,7 +107,7 @@ const AdminCodes = () => {
               className={`px-3 py-1 text-sm rounded-full ${
                 order.is_redeemed
                   ? "bg-muted text-muted-foreground"
-                  : "bg-green-500/20 text-green-500"
+                  : "bg-primary/20 text-primary"
               }`}
             >
               {order.is_redeemed ? "مُستخدم" : "صالح"}

@@ -109,7 +109,7 @@ const AdminOrders = () => {
                   </td>
                   <td className="p-4">
                     <span className={`px-2 py-1 text-xs rounded-full ${
-                      order.is_redeemed ? "bg-green-500/20 text-green-500" : "bg-accent/20 text-accent"
+                      order.is_redeemed ? "bg-primary/20 text-primary" : "bg-accent/20 text-accent"
                     }`}>
                       {order.is_redeemed ? "مُستَلم" : "جديد"}
                     </span>
