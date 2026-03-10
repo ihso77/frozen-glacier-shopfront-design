@@ -66,9 +66,9 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 flex items-center justify-center shadow-lg shadow-primary/20">
-              <span className="text-lg">❄️</span>
+              <span className="text-lg">✦</span>
             </div>
-            <span className="text-2xl font-black tracking-tight frozen-logo">فروزن</span>
+            <span className="text-2xl font-black tracking-tight frozen-logo">Nova Store</span>
           </Link>
 
           {/* Desktop Navigation */}

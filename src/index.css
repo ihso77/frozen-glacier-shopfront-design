@@ -1,100 +1,99 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* فروزن - نظام التصميم الجليدي المحسن */
+/* Nova Store - نظام التصميم البنفسجي */
 
 @layer base {
   :root {
-    /* الألوان الأساسية - داكنة مع أزرق جليدي */
-    --background: 220 25% 8%;
+    --background: 270 30% 6%;
     --foreground: 0 0% 98%;
 
-    --card: 220 25% 12%;
+    --card: 270 25% 11%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 220 25% 10%;
+    --popover: 270 25% 9%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 195 100% 50%;
-    --primary-foreground: 220 25% 8%;
+    --primary: 270 80% 65%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 20% 15%;
+    --secondary: 270 20% 14%;
     --secondary-foreground: 0 0% 90%;
 
-    --muted: 220 20% 18%;
-    --muted-foreground: 220 10% 55%;
+    --muted: 270 20% 16%;
+    --muted-foreground: 270 10% 55%;
 
-    --accent: 195 90% 60%;
-    --accent-foreground: 220 25% 8%;
+    --accent: 290 70% 60%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 20% 18%;
-    --input: 220 20% 15%;
-    --ring: 195 100% 50%;
+    --border: 270 20% 16%;
+    --input: 270 20% 14%;
+    --ring: 270 80% 65%;
 
     --radius: 0.75rem;
 
-    /* ألوان الثلج والجليد */
-    --ice: 195 100% 85%;
-    --frost: 200 80% 90%;
-    --glacier: 195 80% 40%;
-    --snow: 200 100% 97%;
-    --aurora: 180 100% 45%;
+    /* ألوان Nova */
+    --ice: 270 80% 85%;
+    --frost: 280 60% 90%;
+    --glacier: 270 60% 40%;
+    --snow: 280 100% 97%;
+    --aurora: 290 80% 55%;
 
     /* التدرجات */
-    --gradient-ice: linear-gradient(135deg, hsl(195 100% 50%), hsl(180 100% 45%));
-    --gradient-frost: linear-gradient(180deg, hsl(220 25% 12%), hsl(220 25% 6%));
-    --gradient-glass: linear-gradient(135deg, hsl(220 20% 18% / 0.3), hsl(220 20% 12% / 0.1));
-    --gradient-aurora: linear-gradient(135deg, hsl(195 100% 50%), hsl(180 100% 50%), hsl(195 100% 60%));
+    --gradient-ice: linear-gradient(135deg, hsl(270 80% 65%), hsl(290 80% 55%));
+    --gradient-frost: linear-gradient(180deg, hsl(270 25% 11%), hsl(270 30% 5%));
+    --gradient-glass: linear-gradient(135deg, hsl(270 20% 16% / 0.3), hsl(270 20% 11% / 0.1));
+    --gradient-aurora: linear-gradient(135deg, hsl(270 80% 65%), hsl(290 80% 55%), hsl(310 70% 60%));
     
     /* الظلال */
-    --shadow-ice: 0 8px 32px hsl(195 100% 50% / 0.15);
-    --shadow-glow: 0 0 30px hsl(195 100% 50% / 0.3);
-    --shadow-card: 0 4px 24px hsl(220 25% 5% / 0.5);
+    --shadow-ice: 0 8px 32px hsl(270 80% 65% / 0.15);
+    --shadow-glow: 0 0 30px hsl(270 80% 65% / 0.3);
+    --shadow-card: 0 4px 24px hsl(270 30% 4% / 0.5);
 
-    --sidebar-background: 220 25% 10%;
+    --sidebar-background: 270 25% 9%;
     --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 195 100% 50%;
-    --sidebar-primary-foreground: 220 25% 8%;
-    --sidebar-accent: 220 20% 15%;
+    --sidebar-primary: 270 80% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 270 20% 14%;
     --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 220 20% 18%;
-    --sidebar-ring: 195 100% 50%;
+    --sidebar-border: 270 20% 16%;
+    --sidebar-ring: 270 80% 65%;
   }
 
   .dark {
-    --background: 220 25% 8%;
+    --background: 270 30% 6%;
     --foreground: 0 0% 98%;
-    --card: 220 25% 12%;
+    --card: 270 25% 11%;
     --card-foreground: 0 0% 98%;
-    --popover: 220 25% 10%;
+    --popover: 270 25% 9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 195 100% 50%;
-    --primary-foreground: 220 25% 8%;
-    --secondary: 220 20% 15%;
+    --primary: 270 80% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 270 20% 14%;
     --secondary-foreground: 0 0% 90%;
-    --muted: 220 20% 18%;
-    --muted-foreground: 220 10% 55%;
-    --accent: 195 90% 60%;
-    --accent-foreground: 220 25% 8%;
+    --muted: 270 20% 16%;
+    --muted-foreground: 270 10% 55%;
+    --accent: 290 70% 60%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 20% 18%;
-    --input: 220 20% 15%;
-    --ring: 195 100% 50%;
-    --sidebar-background: 220 25% 10%;
+    --border: 270 20% 16%;
+    --input: 270 20% 14%;
+    --ring: 270 80% 65%;
+    --sidebar-background: 270 25% 9%;
     --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 195 100% 50%;
-    --sidebar-primary-foreground: 220 25% 8%;
-    --sidebar-accent: 220 20% 15%;
+    --sidebar-primary: 270 80% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 270 20% 14%;
     --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 220 20% 18%;
-    --sidebar-ring: 195 100% 50%;
+    --sidebar-border: 270 20% 16%;
+    --sidebar-ring: 270 80% 65%;
   }
 }
 
@@ -134,7 +133,8 @@
 
   .frozen-logo {
     @apply font-black;
-    background: linear-gradient(135deg, hsl(195 100% 80%), hsl(200 100% 95%), hsl(195 100% 70%), hsl(180 100% 60%));
+    font-family: 'Space Grotesk', sans-serif;
+    background: linear-gradient(135deg, hsl(270 80% 80%), hsl(290 70% 85%), hsl(310 70% 75%), hsl(270 90% 70%));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -175,16 +175,16 @@
     @apply btn-slim bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20;
   }
 
-  /* رقاقة الثلج المحسنة */
+  /* جزيئات Nova */
   .snowflake {
     position: absolute;
-    color: hsl(195 100% 90% / 0.15);
+    color: hsl(270 80% 80% / 0.15);
     pointer-events: none;
     animation: snowfall linear infinite;
   }
 
   .snowflake::before {
-    content: '❄';
+    content: '✦';
     font-size: inherit;
   }
 }
@@ -218,11 +218,11 @@
 
   @keyframes pulse-glow {
     0%, 100% { 
-      box-shadow: 0 0 20px hsl(195 100% 50% / 0.2);
+      box-shadow: 0 0 20px hsl(270 80% 65% / 0.2);
       transform: scale(1);
     }
     50% { 
-      box-shadow: 0 0 40px hsl(195 100% 50% / 0.4);
+      box-shadow: 0 0 40px hsl(270 80% 65% / 0.4);
       transform: scale(1.02);
     }
   }
@@ -254,7 +254,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle, hsl(195 100% 70% / 0.3) 0%, transparent 70%);
+    background: radial-gradient(circle, hsl(270 80% 70% / 0.3) 0%, transparent 70%);
     transform: scale(0);
     transition: transform 0.5s ease-out;
   }

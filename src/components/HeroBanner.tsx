@@ -10,7 +10,7 @@ const HeroBanner = () => {
       
       {/* Animated Grid */}
       <div className="absolute inset-0 opacity-[0.03]" style={{
-        backgroundImage: 'linear-gradient(hsl(195 100% 50% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(195 100% 50% / 0.3) 1px, transparent 1px)',
+        backgroundImage: 'linear-gradient(hsl(270 80% 65% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(270 80% 65% / 0.3) 1px, transparent 1px)',
         backgroundSize: '60px 60px',
       }} />
 
@@ -44,8 +44,8 @@ const HeroBanner = () => {
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-black mb-6 leading-tight tracking-tight">
               <span className="gradient-text">مرحباً بكم</span>
               <br />
-              <span className="text-foreground">في متجر </span>
-              <span className="frozen-logo text-4xl md:text-5xl lg:text-7xl">فروزن</span>
+              <span className="text-foreground">في </span>
+              <span className="frozen-logo text-4xl md:text-5xl lg:text-7xl">Nova Store</span>
             </h1>
             
             <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-lg mx-auto lg:mx-0 lg:mr-0 leading-relaxed">
@@ -78,10 +78,10 @@ const HeroBanner = () => {
                 <div className="glass-card p-6 rounded-2xl animate-float" style={{ animationDuration: "5s" }}>
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center border border-primary/20">
-                      <span className="text-2xl">❄️</span>
+                      <span className="text-2xl">✦</span>
                     </div>
                     <div>
-                      <h3 className="font-bold text-foreground">متجر فروزن</h3>
+                      <h3 className="font-bold text-foreground">Nova Store</h3>
                       <p className="text-xs text-muted-foreground">خدمات رقمية متميزة</p>
                     </div>
                   </div>
