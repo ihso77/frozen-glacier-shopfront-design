@@ -135,7 +135,7 @@ const AdminLayout = () => {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 flex items-center justify-center mx-auto mb-4 animate-pulse">
-            <span className="text-3xl">❄️</span>
+            <span className="text-3xl">✦</span>
           </div>
           <p className="text-muted-foreground">جاري التحميل...</p>
         </div>
