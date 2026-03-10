@@ -234,9 +234,9 @@ const AuthPage = () => {
             <div className="text-center mb-8">
               <Link to="/" className="inline-flex items-center gap-2 mb-6 group">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 flex items-center justify-center shadow-lg shadow-primary/20 group-hover:shadow-primary/40 transition-all duration-300">
-                  <span className="text-2xl">❄️</span>
+                  <span className="text-2xl">✦</span>
                 </div>
-                <span className="text-2xl font-black frozen-logo">فروزن</span>
+                <span className="text-2xl font-black frozen-logo">Nova Store</span>
               </Link>
               <h1 className="text-2xl font-bold text-foreground mb-2">
                 {isLogin ? "مرحباً بعودتك" : step === "otp" ? "التحقق من الجوال" : "إنشاء حساب جديد"}
