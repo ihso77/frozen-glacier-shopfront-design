@@ -216,9 +216,9 @@ const AuthPage = () => {
       <div className="hidden lg:flex flex-1 items-center justify-center p-12 relative z-10">
         <div className="relative z-10 max-w-md space-y-8 text-center">
           <div className="w-24 h-24 mx-auto rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 flex items-center justify-center mb-6 shadow-lg shadow-primary/20">
-            <span className="text-5xl">❄️</span>
+            <span className="text-5xl">✦</span>
           </div>
-          <h2 className="text-4xl font-bold frozen-logo mb-4">فروزن</h2>
+          <h2 className="text-4xl font-bold frozen-logo mb-4">Nova Store</h2>
           <p className="text-muted-foreground">متجرك الموثوق للخدمات الرقمية</p>
           <div className="glass-card p-6 flex flex-col items-center text-center">
             <Shield className="w-10 h-10 text-primary mb-4" />
