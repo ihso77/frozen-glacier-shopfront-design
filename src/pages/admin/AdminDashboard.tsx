@@ -87,8 +87,8 @@ const AdminDashboard = () => {
       title: "الزيارات (24 ساعة)",
       value: stats.recentEvents,
       icon: Eye,
-      color: "text-green-500",
-      bgColor: "bg-green-500/10",
+      color: "text-primary",
+      bgColor: "bg-primary/10",
     },
   ];
 

@@ -270,7 +270,7 @@ const SupportWidget = () => {
                       >
                         <div className="flex items-center justify-between mb-1">
                           <span className={`px-2 py-0.5 text-xs rounded-full ${
-                            t.status === "open" ? "bg-green-500/20 text-green-400" : "bg-muted text-muted-foreground"
+                            t.status === "open" ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"
                           }`}>
                             {t.status === "open" ? "مفتوحة" : "مغلقة"}
                           </span>

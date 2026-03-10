@@ -103,13 +103,13 @@ const AdminOrders = () => {
                     <div className="flex items-center gap-1">
                       <code className="text-xs font-mono text-muted-foreground" dir="ltr">{order.redemption_code}</code>
                       <button onClick={() => copyCode(order.redemption_code)} className="text-muted-foreground hover:text-primary">
-                        {copiedCode === order.redemption_code ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3" />}
+                        {copiedCode === order.redemption_code ? <Check className="w-3 h-3 text-primary" /> : <Copy className="w-3 h-3" />}
                       </button>
                     </div>
                   </td>
                   <td className="p-4">
                     <span className={`px-2 py-1 text-xs rounded-full ${
-                      order.is_redeemed ? "bg-green-500/20 text-green-500" : "bg-accent/20 text-accent"
+                      order.is_redeemed ? "bg-primary/20 text-primary" : "bg-accent/20 text-accent"
                     }`}>
                       {order.is_redeemed ? "مُستَلم" : "جديد"}
                     </span>

@@ -189,7 +189,7 @@ const AdminMessages = () => {
                     {message.content}
                   </p>
                   {message.replied_at && (
-                    <span className="inline-flex items-center gap-1 mt-2 text-xs text-green-500">
+                    <span className="inline-flex items-center gap-1 mt-2 text-xs text-primary">
                       <Reply className="w-3 h-3" />
                       تم الرد
                     </span>

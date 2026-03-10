@@ -244,7 +244,7 @@ const AdminProducts = () => {
                     <span
                       className={`px-2 py-1 rounded-full text-xs ${
                         product.is_active
-                          ? "bg-green-500/20 text-green-500"
+                          ? "bg-primary/20 text-primary"
                           : "bg-destructive/20 text-destructive"
                       }`}
                     >

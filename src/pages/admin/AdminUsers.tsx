@@ -55,10 +55,10 @@ const AdminUsers = () => {
 
   const getRoleIcon = (role: string) => {
     switch (role) {
-      case "owner": return <Crown className="w-4 h-4 text-yellow-500" />;
+      case "owner": return <Crown className="w-4 h-4 text-accent" />;
       case "admin": return <Shield className="w-4 h-4 text-primary" />;
-      case "customer": return <ShoppingCart className="w-4 h-4 text-green-500" />;
-      case "vip_customer": return <Star className="w-4 h-4 text-amber-500" />;
+      case "customer": return <ShoppingCart className="w-4 h-4 text-primary" />;
+      case "vip_customer": return <Star className="w-4 h-4 text-accent" />;
       default: return <User className="w-4 h-4 text-muted-foreground" />;
     }
   };
@@ -73,10 +73,10 @@ const AdminUsers = () => {
 
   const getRoleBadgeClass = (role: string) => {
     const map: Record<string, string> = {
-      owner: "bg-yellow-500/20 text-yellow-500",
+      owner: "bg-accent/20 text-accent",
       admin: "bg-primary/20 text-primary",
-      customer: "bg-green-500/20 text-green-500",
-      vip_customer: "bg-amber-500/20 text-amber-500",
+      customer: "bg-primary/20 text-primary",
+      vip_customer: "bg-accent/20 text-accent",
     };
     return map[role] || "bg-secondary text-muted-foreground";
   };
@@ -107,10 +107,10 @@ const AdminUsers = () => {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         {[
           { label: "الكل", count: users.length, color: "text-foreground" },
-          { label: "المالك", count: users.filter(u => u.role === "owner").length, color: "text-yellow-500" },
+          { label: "المالك", count: users.filter(u => u.role === "owner").length, color: "text-accent" },
           { label: "المديرين", count: users.filter(u => u.role === "admin").length, color: "text-primary" },
-          { label: "العملاء", count: users.filter(u => u.role === "customer").length, color: "text-green-500" },
-          { label: "VIP", count: users.filter(u => u.role === "vip_customer").length, color: "text-amber-500" },
+          { label: "العملاء", count: users.filter(u => u.role === "customer").length, color: "text-primary" },
+          { label: "VIP", count: users.filter(u => u.role === "vip_customer").length, color: "text-accent" },
         ].map((s, i) => (
           <div key={i} className="glass-card p-3 text-center">
             <p className={`text-xl font-bold ${s.color}`}>{s.count}</p>

@@ -276,8 +276,8 @@ const CheckoutModal = ({ onClose }: CheckoutModalProps) => {
           {step === "complete" && (
             <div className="space-y-6">
               <div className="text-center py-4">
-                <div className="w-16 h-16 mx-auto rounded-full bg-green-500/10 flex items-center justify-center mb-4">
-                  <Check className="w-8 h-8 text-green-500" />
+                <div className="w-16 h-16 mx-auto rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                  <Check className="w-8 h-8 text-primary" />
                 </div>
                 <p className="text-foreground font-bold text-lg mb-1">تمت العملية بنجاح!</p>
                 <p className="text-muted-foreground text-sm">احفظ الأكواد التالية لاستخدامها</p>
@@ -296,7 +296,7 @@ const CheckoutModal = ({ onClose }: CheckoutModalProps) => {
                         className="p-2 rounded-lg hover:bg-secondary/50 transition-colors text-muted-foreground hover:text-primary"
                       >
                         {copiedCode === order.code ? (
-                          <Check className="w-4 h-4 text-green-500" />
+                          <Check className="w-4 h-4 text-primary" />
                         ) : (
                           <Copy className="w-4 h-4" />
                         )}
