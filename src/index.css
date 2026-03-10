@@ -133,7 +133,8 @@
 
   .frozen-logo {
     @apply font-black;
-    background: linear-gradient(135deg, hsl(195 100% 80%), hsl(200 100% 95%), hsl(195 100% 70%), hsl(180 100% 60%));
+    font-family: 'Space Grotesk', sans-serif;
+    background: linear-gradient(135deg, hsl(270 80% 80%), hsl(290 70% 85%), hsl(310 70% 75%), hsl(270 90% 70%));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
