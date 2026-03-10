@@ -44,8 +44,8 @@ const HeroBanner = () => {
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-black mb-6 leading-tight tracking-tight">
               <span className="gradient-text">مرحباً بكم</span>
               <br />
-              <span className="text-foreground">في متجر </span>
-              <span className="frozen-logo text-4xl md:text-5xl lg:text-7xl">فروزن</span>
+              <span className="text-foreground">في </span>
+              <span className="frozen-logo text-4xl md:text-5xl lg:text-7xl">Nova Store</span>
             </h1>
             
             <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-lg mx-auto lg:mx-0 lg:mr-0 leading-relaxed">
