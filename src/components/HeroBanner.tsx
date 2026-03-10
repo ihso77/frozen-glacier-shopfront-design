@@ -78,10 +78,10 @@ const HeroBanner = () => {
                 <div className="glass-card p-6 rounded-2xl animate-float" style={{ animationDuration: "5s" }}>
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center border border-primary/20">
-                      <span className="text-2xl">❄️</span>
+                      <span className="text-2xl">✦</span>
                     </div>
                     <div>
-                      <h3 className="font-bold text-foreground">متجر فروزن</h3>
+                      <h3 className="font-bold text-foreground">Nova Store</h3>
                       <p className="text-xs text-muted-foreground">خدمات رقمية متميزة</p>
                     </div>
                   </div>

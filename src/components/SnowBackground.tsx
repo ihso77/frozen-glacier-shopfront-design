@@ -30,16 +30,16 @@ const SnowBackground = () => {
       {/* خلفية متدرجة */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-secondary/20" />
       
-      {/* توهجات جليدية */}
+      {/* توهجات بنفسجية */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px]" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent/5 rounded-full blur-[100px]" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/3 rounded-full blur-[150px]" />
 
-      {/* رقاقات الثلج المتساقطة */}
+      {/* جزيئات متساقطة */}
       {snowflakes.map((flake) => (
         <div
           key={flake.id}
-          className="absolute text-white/10"
+          className="absolute text-primary/10"
           style={{
             left: `${flake.left}%`,
             fontSize: `${flake.size}px`,
@@ -47,7 +47,7 @@ const SnowBackground = () => {
             animationDelay: `${flake.delay}s`,
           }}
         >
-          ❄
+          ✦
         </div>
       ))}
     </div>
