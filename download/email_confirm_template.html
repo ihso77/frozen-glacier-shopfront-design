@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تأكيد البريد الإلكتروني - فروزن</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Tajawal', Arial, sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); min-height: 100vh;">
+  
+  <table role="presentation" cellspacing="0" cellpadding="0" width="100%" style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+    
+    <!-- Header with Logo -->
+    <tr>
+      <td align="center" style="padding: 30px 0;">
+        <table role="presentation" cellspacing="0" cellpadding="0">
+          <tr>
+            <td style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(168, 85, 247, 0.2)); border: 2px solid rgba(139, 92, 246, 0.3); border-radius: 20px; padding: 15px 25px;">
+              <table role="presentation" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td style="font-size: 28px;">❄️</td>
+                  <td style="padding-right: 12px;">
+                    <span style="font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #8b5cf6, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">فروزن</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <!-- Main Card -->
+    <tr>
+      <td>
+        <table role="presentation" cellspacing="0" cellpadding="0" width="100%" style="background: rgba(30, 27, 75, 0.5); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 24px; backdrop-filter: blur(10px);">
+          
+          <!-- Card Header -->
+          <tr>
+            <td align="center" style="padding: 40px 40px 20px 40px;">
+              <div style="width: 80px; height: 80px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(168, 85, 247, 0.3)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; border: 2px solid rgba(139, 92, 246, 0.4);">
+                <span style="font-size: 40px;">✉️</span>
+              </div>
+              <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #ffffff;">تأكيد البريد الإلكتروني</h1>
+              <p style="margin: 10px 0 0 0; font-size: 16px; color: rgba(255, 255, 255, 0.6);">مرحباً بك في فروزن!</p>
+            </td>
+          </tr>
+
+          <!-- Card Body -->
+          <tr>
+            <td style="padding: 30px 40px;">
+              <p style="margin: 0 0 20px 0; font-size: 16px; color: rgba(255, 255, 255, 0.8); line-height: 1.8; text-align: center;">
+                شكراً لإنشاء حسابك! يرجى تأكيد بريدك الإلكتروني للبدء في استخدام متجرك الرقمي الموثوق.
+              </p>
+              
+              <!-- User Email -->
+              <table role="presentation" cellspacing="0" cellpadding="0" width="100%" style="margin: 25px 0;">
+                <tr>
+                  <td style="background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 12px; padding: 15px; text-align: center;">
+                    <p style="margin: 0 0 5px 0; font-size: 12px; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; letter-spacing: 1px;">البريد الإلكتروني</p>
+                    <p style="margin: 0; font-size: 18px; font-weight: 600; color: #a855f7; direction: ltr;">{{ .Email }}</p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Confirm Button -->
+              <table role="presentation" cellspacing="0" cellpadding="0" width="100%" style="margin: 30px 0;">
+                <tr>
+                  <td align="center">
+                    <a href="{{ .ConfirmationURL }}" style="display: inline-block; background: linear-gradient(135deg, #8b5cf6, #a855f7); color: #ffffff; text-decoration: none; padding: 18px 50px; border-radius: 14px; font-size: 18px; font-weight: 700; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3); transition: all 0.3s ease;">
+                      تأكيد البريد الإلكتروني
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Or use link -->
+              <table role="presentation" cellspacing="0" cellpadding="0" width="100%">
+                <tr>
+                  <td style="text-align: center;">
+                    <p style="margin: 0 0 10px 0; font-size: 14px; color: rgba(255, 255, 255, 0.5);">أو انسخ الرابط التالي:</p>
+                    <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 10px; padding: 12px; word-break: break-all;">
+                      <code style="font-size: 12px; color: #8b5cf6; direction: ltr; display: block;">{{ .ConfirmationURL }}</code>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Security Note -->
+              <table role="presentation" cellspacing="0" cellpadding="0" width="100%" style="margin-top: 30px;">
+                <tr>
+                  <td style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 12px; padding: 15px;">
+                    <table role="presentation" cellspacing="0" cellpadding="0" width="100%">
+                      <tr>
+                        <td width="30" style="font-size: 20px;">⚠️</td>
+                        <td>
+                          <p style="margin: 0; font-size: 14px; color: rgba(255, 255, 255, 0.8);">
+                            <strong style="color: #f59e0b;">تنبيه أمني:</strong> إذا لم تطلب إنشاء هذا الحساب، يمكنك تجاهل هذا البريد بأمان.
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+
+    <!-- Footer -->
+    <tr>
+      <td align="center" style="padding: 40px 20px 20px 20px;">
+        <table role="presentation" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="center">
+              <p style="margin: 0 0 15px 0; font-size: 14px; color: rgba(255, 255, 255, 0.4);">
+                © 2026 فروزن | Frozen. جميع الحقوق محفوظة.
+              </p>
+              <table role="presentation" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td style="padding: 0 10px;">
+                    <span style="display: inline-block; padding: 6px 12px; background: rgba(139, 92, 246, 0.1); border-radius: 20px; font-size: 12px; color: rgba(255, 255, 255, 0.5);">🔒 اتصال آمن</span>
+                  </td>
+                  <td style="padding: 0 10px;">
+                    <span style="display: inline-block; padding: 6px 12px; background: rgba(139, 92, 246, 0.1); border-radius: 20px; font-size: 12px; color: rgba(255, 255, 255, 0.5);">🛡️ حماية البيانات</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+  </table>
+</body>
+</html>

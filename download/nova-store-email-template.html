@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirm Your Signup - Nova Store</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #0f0f12; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #0f0f12; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <!-- Main Container -->
+        <table role="presentation" width="100%" style="max-width: 500px; background-color: #18181b; border-radius: 16px; overflow: hidden; border: 1px solid rgba(139, 92, 246, 0.2); box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);">
+          
+          <!-- Header with Dark Gradient -->
+          <tr>
+            <td style="background: linear-gradient(135deg, hsl(270, 70%, 40%) 0%, hsl(290, 65%, 35%) 100%); padding: 40px 30px; text-align: center;">
+              <!-- Logo -->
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="center">
+                    <div style="width: 70px; height: 70px; background-color: rgba(255, 255, 255, 0.15); border-radius: 16px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px; border: 1px solid rgba(255, 255, 255, 0.2);">
+                      <span style="font-size: 32px; font-weight: 800; color: #ffffff;">N</span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center">
+                    <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px;">Nova Store</h1>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Body Content -->
+          <tr>
+            <td style="padding: 40px 30px;">
+              <!-- Greeting -->
+              <h2 style="margin: 0 0 16px 0; font-size: 24px; font-weight: 600; color: #f4f4f5; text-align: center;">Confirm Your Signup</h2>
+              
+              <!-- Message -->
+              <p style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #a1a1aa; text-align: center;">
+                Welcome to <strong style="color: hsl(270, 70%, 65%);">Nova Store</strong>!<br>
+                Please confirm your email address to get started.
+              </p>
+
+              <!-- Confirm Button -->
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="center">
+                    <a href="{{ .ConfirmationURL }}" style="display: inline-block; background: linear-gradient(135deg, hsl(270, 70%, 45%) 0%, hsl(290, 65%, 40%) 100%); color: #ffffff; text-decoration: none; padding: 16px 48px; border-radius: 12px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);">
+                      Confirm Your Email
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Alternative Link -->
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-top: 30px;">
+                <tr>
+                  <td style="background-color: #27272a; border-radius: 10px; padding: 16px; border: 1px solid rgba(139, 92, 246, 0.15);">
+                    <p style="margin: 0 0 8px 0; font-size: 13px; color: #71717a; text-align: center;">
+                      If the button doesn't work, copy and paste this link into your browser:
+                    </p>
+                    <p style="margin: 0; font-size: 12px; color: hsl(270, 70%, 65%); word-break: break-all; text-align: center; font-family: monospace;">
+                      {{ .ConfirmationURL }}
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Security Notice -->
+              <p style="margin: 30px 0 0 0; font-size: 13px; color: #52525b; text-align: center;">
+                If you didn't create an account with Nova Store, you can safely ignore this email.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #1f1f23; padding: 24px 30px; border-top: 1px solid rgba(139, 92, 246, 0.1);">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="center">
+                    <p style="margin: 0 0 8px 0; font-size: 14px; color: #71717a;">
+                      <strong style="color: hsl(270, 70%, 65%);">Nova Store</strong> Team
+                    </p>
+                    <p style="margin: 0; font-size: 12px; color: #52525b;">
+                      © 2024 Nova Store. All rights reserved.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+        </table>
+        <!-- End Main Container -->
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
