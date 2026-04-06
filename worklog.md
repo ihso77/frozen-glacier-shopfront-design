@@ -111,3 +111,59 @@ CREATE TABLE bot_logs (
 - All text is in Arabic with RTL layout
 - The pricing is set to $0.99 for 2 months
 - Storage limit is 100MB per subscription
+
+---
+## Task ID: 2 - Demo Payment & Hosting System
+
+### Work Task
+Create a complete demo payment system for hosting subscriptions:
+- No real payment - demo mode only
+- Three hosting packages (Starter, Pro, Enterprise)
+- VSCode-like file editor
+- Bot control panel with run/stop
+- Database tables for hosting
+
+### Work Summary
+
+#### Files Created/Modified:
+
+1. **`/src/pages/HostingPage.tsx`** - Main hosting page (NEW)
+   - Three pricing packages: Starter ($0.99), Pro ($2.99), Enterprise ($9.99)
+   - Demo payment modal (no real payment)
+   - After subscription: VSCode-like editor with file tree
+   - Bot control panel with run/stop buttons
+   - Real-time logs viewer
+   - Storage usage display
+   - Days remaining countdown
+
+2. **`/src/pages/admin/AdminPayment.tsx`** - Payment settings (NEW)
+   - Demo mode indicator
+   - Currency settings
+   - Min/max amount settings
+   - Test connection button
+
+3. **`/src/App.tsx`** - Routes updated
+   - Added `/hosting` route
+   - Added `/admin/payment` route
+
+4. **`/src/components/Header.tsx`** - Navigation updated
+   - Added "استضافات" link in nav
+
+5. **`/src/components/AdminLayout.tsx`** - Admin nav updated
+   - Added "الدفع" link with CreditCard icon
+
+6. **`/download/hosting_tables_setup.sql`** - Database setup (NEW)
+   - `hosting_subscriptions` table
+   - `bot_files` table  
+   - `bot_logs` table
+   - RLS disabled for demo
+   - Triggers for updated_at
+
+### Features:
+- ✅ Demo payment (no real money)
+- ✅ Three hosting packages
+- ✅ File editor with create/delete/save
+- ✅ Bot run/stop simulation
+- ✅ Real-time logs
+- ✅ Storage tracking
+- ✅ Expiration countdown
