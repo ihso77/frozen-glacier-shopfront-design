@@ -11,6 +11,11 @@ const corsHeaders = {
 const COINGATE_API_KEY = 'gCxoJVnV5Ljzk3dAkTiJDRaR8s9GSWajxanqLzMU';
 const COINGATE_API = 'https://api-sandbox.coingate.com/v2';
 
+// ⚠️ PAYMENT DISABLED FOR TESTING - Set to false to re-enable payments
+const PAYMENT_DISABLED = true;
+const PAYMENT_DISABLED_MESSAGE = 'الدفع معطل مؤقتاً لأغراض الاختبار. يرجى المحاولة لاحقاً.';
+
+
 const getSupabase = () => {
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
   const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -419,6 +424,19 @@ async function handleStopBot(body: any) {
 
 // MAIN HANDLER
 serve(async (req) => {
+  // ⚠️ PAYMENT DISABLED CHECK
+  if (PAYMENT_DISABLED) {
+    return new Response(JSON.stringify({ 
+      error: PAYMENT_DISABLED_MESSAGE,
+      payment_disabled: true,
+      message_ar: 'الدفع معطل مؤقتاً لأغراض الاختبار',
+      message_en: 'Payment is temporarily disabled for testing'
+    }), {
+      status: 503,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+  }
+
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
