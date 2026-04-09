@@ -1,38 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
+import { LanguageProvider } from "@/contexts/LanguageContext";
+import { AuthProvider } from "@/contexts/AuthContext";
+import Navbar from "@/components/layout/Navbar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Nova Store - متجر نوفا",
-  description: "متجر نوفا لخدمات الاستضافة والبوتات والأدوات الذكية. حلول متكاملة لاحتياجاتك التقنية.",
-  keywords: ["Nova Store", "متجر نوفا", "استضافة", "بوتات", "حلول تقنية", "hosting", "bots"],
-  authors: [{ name: "Nova Store Team" }],
-  icons: {
-    icon: "/favicon.ico",
-  },
-  openGraph: {
-    title: "Nova Store - متجر نوفا",
-    description: "متجر نوفا لخدمات الاستضافة والبوتات والأدوات الذكية",
-    url: "https://nova-store.dev",
-    siteName: "Nova Store",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Nova Store - متجر نوفا",
-    description: "متجر نوفا لخدمات الاستضافة والبوتات والأدوات الذكية",
-  },
+  title: "Nova Store | Where Dreams Become Reality",
+  description: "Premium digital products & web solutions tailored for you.",
 };
 
 export default function RootLayout({
@@ -41,12 +18,39 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
-      >
-        {children}
-        <Toaster />
+    <html lang="en" className="overflow-x-hidden w-full">
+      <body className={`${inter.className} min-h-screen bg-[#020205] text-white relative flex flex-col overflow-x-hidden w-full m-0 p-0`}>
+        {/* Background Video Layer */}
+        <div className="fixed inset-0 z-[-2] w-screen h-screen overflow-hidden bg-[#020205]">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover opacity-30"
+            src="/stars.mp4"
+          />
+        </div>
+
+        {/* Dark Overlay with Gradient */}
+        <div
+          className="fixed inset-0 z-[-1] pointer-events-none w-screen h-screen mix-blend-multiply"
+          style={{
+            background: "radial-gradient(circle at center, rgba(2,2,5,0.8) 0%, rgba(0,0,0,1) 100%)",
+          }}
+        />
+
+        <AuthProvider>
+          <LanguageProvider>
+            <div className="flex flex-col min-h-screen relative z-10 w-full max-w-[100vw] overflow-x-hidden">
+              <div className="mesh-gradient" />
+              <Navbar />
+              <main className="flex-grow w-full overflow-x-hidden flex flex-col">
+                {children}
+              </main>
+            </div>
+          </LanguageProvider>
+        </AuthProvider>
       </body>
     </html>
   );
