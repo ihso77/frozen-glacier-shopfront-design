@@ -20,17 +20,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="overflow-x-hidden w-full">
       <body className={`${inter.className} min-h-screen bg-[#020205] text-white relative flex flex-col overflow-x-hidden w-full m-0 p-0`}>
-        {/* Background Video Layer */}
-        <div className="fixed inset-0 z-[-2] w-screen h-screen overflow-hidden bg-[#020205]">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover opacity-30"
-            src="/stars.mp4"
-          />
-        </div>
+        <div
+          className="fixed inset-0 z-[-2] w-screen h-screen overflow-hidden"
+          style={{
+            background:
+              "radial-gradient(circle at 20% 20%, rgba(129,140,248,0.12) 0%, transparent 28%), radial-gradient(circle at 80% 30%, rgba(34,211,238,0.08) 0%, transparent 24%), linear-gradient(180deg, #020205 0%, #04050b 100%)",
+          }}
+        />
 
         {/* Dark Overlay with Gradient */}
         <div

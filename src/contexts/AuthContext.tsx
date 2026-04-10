@@ -1,19 +1,16 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "@/integrations/supabase/client";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder";
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export { supabase };
 
 export interface User {
     id: string;
     name: string;
     email: string;
-    phone?: string;
-    role: "user" | "owner";
+    phone?: string | null;
+    role: "user" | "owner" | "admin" | "member" | "customer" | "vip_customer" | "supplier";
     avatar?: string;
     createdAt: string;
 }
@@ -26,6 +23,39 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const buildUser = async (sessionUser: any): Promise<User> => {
+    const [{ data: profile }, { data: roles }] = await Promise.all([
+        supabase
+            .from("profiles")
+            .select("full_name, email, phone, created_at")
+            .eq("user_id", sessionUser.id)
+            .maybeSingle(),
+        supabase
+            .from("user_roles")
+            .select("role")
+            .eq("user_id", sessionUser.id),
+    ]);
+
+    const resolvedRole =
+        roles?.find((entry) => entry.role === "owner")?.role ||
+        roles?.[0]?.role ||
+        "customer";
+
+    return {
+        id: sessionUser.id,
+        email: profile?.email || sessionUser.email || "",
+        name:
+            profile?.full_name ||
+            sessionUser.user_metadata?.name ||
+            sessionUser.user_metadata?.full_name ||
+            "User",
+        phone: profile?.phone || sessionUser.user_metadata?.phone || null,
+        role: resolvedRole,
+        avatar: sessionUser.user_metadata?.avatar,
+        createdAt: profile?.created_at || sessionUser.created_at || new Date().toISOString(),
+    };
+};
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
@@ -37,19 +67,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 if (error) throw error;
 
                 if (session?.user) {
-                    const { data: profile } = await supabase
-                        .from("users")
-                        .select("*")
-                        .eq("id", session.user.id)
-                        .single();
-
-                    setUser(profile || {
-                        id: session.user.id,
-                        email: session.user.email,
-                        name: session.user.user_metadata?.name || "User",
-                        role: "user",
-                        createdAt: new Date().toISOString()
-                    });
+                    setUser(await buildUser(session.user));
+                } else {
+                    setUser(null);
                 }
             } catch (error) {
                 console.error("Auth session error:", error);
@@ -63,18 +83,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const { data: authListener } = supabase.auth.onAuthStateChange(
             async (event, session) => {
                 if (session?.user) {
-                    const { data: profile } = await supabase
-                        .from("users")
-                        .select("*")
-                        .eq("id", session.user.id)
-                        .single();
-                    setUser(profile || {
-                        id: session.user.id,
-                        email: session.user.email,
-                        name: session.user.user_metadata?.name || "User",
-                        role: "user",
-                        createdAt: new Date().toISOString()
-                    });
+                    setUser(await buildUser(session.user));
                 } else {
                     setUser(null);
                 }
