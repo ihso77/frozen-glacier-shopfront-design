@@ -1,6 +1,4 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+const nextConfig: any = {
   output: "export",
   distDir: "dist",
   typescript: {
@@ -10,9 +8,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  experimental: {
-    turbopack: false as any,
-  },
+  bundlePagesRouterDependencies: true,
 };
 
 export default nextConfig;
