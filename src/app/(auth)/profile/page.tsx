@@ -56,9 +56,9 @@ export default function ProfilePage() {
         setIsSaving(true);
         try {
             const { error } = await supabase
-                .from('users')
-                .update({ name, phone })
-                .eq('id', user.id);
+                .from('profiles')
+                .update({ full_name: name, phone })
+                .eq('user_id', user.id);
 
             if (error) throw error;
 
@@ -112,7 +112,10 @@ export default function ProfilePage() {
     const regenerateAvatar = async () => {
         const newSeed = Math.random().toString(36).substring(7);
         try {
-            await supabase.from('users').update({ avatar: newSeed }).eq('id', user.id);
+            const { error } = await supabase.auth.updateUser({
+                data: { avatar: newSeed }
+            });
+            if (error) throw error;
             window.location.reload();
         } catch (err) {
             console.error(err);

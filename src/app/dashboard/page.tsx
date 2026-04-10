@@ -210,17 +210,17 @@ export default function DashboardPage() {
                                         orders.map((order, idx) => (
                                             <tr key={idx} className="hover:bg-white/5 transition-colors group">
                                                 <td className="px-8 py-8">
-                                                    <span className="font-bold text-white">{order.item_name}</span>
+                                                    <span className="font-bold text-white">{order.item_name || order.product_name}</span>
                                                 </td>
                                                 <td className="px-8 py-8">
                                                     <span className="font-bold text-white">
-                                                        ${order.amount}
+                                                        ${order.amount ?? order.price}
                                                     </span>
                                                 </td>
                                                 <td className="px-8 py-8">
-                                                    <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold border ${getStatusStyles(order.status)}`}>
+                                                    <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold border ${getStatusStyles(order.status || order.payment_status)}`}>
                                                         <div className="w-1.5 h-1.5 rounded-full bg-current" />
-                                                        {getStatusText(order.status)}
+                                                        {getStatusText(order.status || order.payment_status)}
                                                     </span>
                                                 </td>
                                                 <td className="px-8 py-8 text-slate-400 text-sm">
