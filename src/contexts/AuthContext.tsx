@@ -1,9 +1,17 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { createClient } from "@supabase/supabase-js";
 
-export { supabase };
+const supabaseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    "https://ogtwquccqenwyzrozpvt.supabase.co";
+
+const supabaseAnonKey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ndHdxdWNjcWVud3l6cm96cHZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyMjIzMDIsImV4cCI6MjA4NTc5ODMwMn0.4ASsdjbz_nSuzVwN2aP8mTlJV4_K-ZjxVCu8iiHRDog";
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export interface User {
     id: string;
