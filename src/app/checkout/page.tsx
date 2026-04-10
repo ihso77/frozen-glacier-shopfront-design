@@ -54,6 +54,12 @@ function CheckoutContent() {
         setIsSubmitting(true);
         setErrors({});
 
+        if (paymentDisabled) {
+            setErrors({ submit: lang === "ar" ? "الدفع معطل مؤقتاً من قبل الإدارة" : "Payment is temporarily disabled by admin" });
+            setIsSubmitting(false);
+            return;
+        }
+
         try {
             checkoutSchema.parse(form);
 
@@ -63,7 +69,7 @@ function CheckoutContent() {
                 return;
             }
 
-            // Skip payment - go directly to success (testing mode)
+            // Payment enabled - go to success
             setTimeout(() => {
                 router.push(`/success?type=service&plan=${plan}&lang_code=${selectedLanguage}`);
             }, 1500);
