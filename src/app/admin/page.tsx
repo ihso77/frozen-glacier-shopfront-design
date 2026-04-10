@@ -25,6 +25,42 @@ export default function AdminPage() {
         pending: 10
     });
 
+    const [paymentEnabled, setPaymentEnabled] = useState(true);
+    const [paymentLoading, setPaymentLoading] = useState(false);
+
+    useEffect(() => {
+        if (!loading && user && (user.role === "owner" || user.role === "admin")) {
+            fetchPaymentSetting();
+        }
+    }, [user, loading]);
+
+    const fetchPaymentSetting = async () => {
+        try {
+            const { data: setting } = await supabase
+                .from('site_settings')
+                .select('value')
+                .eq('key', 'payment_enabled')
+                .single();
+            if (setting) {
+                setPaymentEnabled(setting.value === true || setting.value === 'true');
+            }
+        } catch { }
+    };
+
+    const togglePayment = async () => {
+        setPaymentLoading(true);
+        try {
+            const newValue = !paymentEnabled;
+            const { error } = await supabase
+                .from('site_settings')
+                .upsert({ key: 'payment_enabled', value: newValue, updated_at: new Date().toISOString() }, { onConflict: 'key' });
+            if (!error) {
+                setPaymentEnabled(newValue);
+            }
+        } catch { }
+        setPaymentLoading(false);
+    };
+
     useEffect(() => {
         if (!loading) {
             if (!user || user.role !== "owner") {
