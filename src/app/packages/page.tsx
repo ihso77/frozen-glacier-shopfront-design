@@ -1,7 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Check, Star, Zap, Shield, Globe, ArrowRight, Crown, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Mail, Lock, AlertCircle, ArrowRight, ShieldCheck } from "lucide-react";
 import { supabase } from "@/contexts/AuthContext";

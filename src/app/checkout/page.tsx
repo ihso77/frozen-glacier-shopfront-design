@@ -4,7 +4,7 @@ import { Suspense, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { ShieldCheck, Star, Lock, Box, ChevronRight, Activity, CheckCircle2, Zap } from "lucide-react";
 import { checkoutSchema } from "@/lib/validations";
 import { z } from "zod";

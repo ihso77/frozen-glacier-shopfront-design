@@ -17,7 +17,7 @@ import {
     AlertCircle,
     Calendar
 } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function ProfilePage() {
