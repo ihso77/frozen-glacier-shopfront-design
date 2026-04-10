@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
-    "build:dev": "next build",
+    "build:dev": "next build --no-turbopack",
     "start": "next start",
     "lint": "eslint .",
     "db:push": "prisma db push",
