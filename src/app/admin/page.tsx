@@ -29,7 +29,7 @@ export default function AdminPage() {
     const [paymentLoading, setPaymentLoading] = useState(false);
 
     useEffect(() => {
-        if (!loading && user && (user.role === "owner" || user.role === "admin")) {
+        if (!loading && user && user.role === "owner") {
             fetchPaymentSetting();
         }
     }, [user, loading]);
