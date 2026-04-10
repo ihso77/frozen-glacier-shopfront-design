@@ -187,7 +187,7 @@ export default function RegisterPage() {
                                     <Button
                                         type="submit"
                                         className="w-full mt-8 h-18 rounded-[1.5rem] bg-nova-cyan hover:bg-nova-cyan/90 text-black font-black uppercase tracking-[0.3em] text-xs relative overflow-hidden group/btn shadow-[0_20px_50px_rgba(6,182,212,0.3)] transition-all duration-300"
-                                        isLoading={loading}
+                                        disabled={loading}
                                     >
                                         <span className="relative z-10 flex items-center justify-center gap-4">
                                             {lang === "en" ? "INITIALIZE SYNC" : "بدء التزامن"}

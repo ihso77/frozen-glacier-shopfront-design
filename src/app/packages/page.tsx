@@ -119,7 +119,7 @@ export default function PackagesPage() {
                                     <div className="pt-8">
                                         <Link href={`/checkout?plan=${plan.id}`}>
                                             <Button
-                                                variant={plan.popular ? "primary" : "secondary"}
+                                                variant={plan.popular ? "default" : "secondary"}
                                                 className="w-full h-16 rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] shadow-[0_10px_30px_rgba(0,0,0,0.3)]"
                                             >
                                                 {lang === "en" ? "Initiate Selection" : "بدء الاختيار"}
