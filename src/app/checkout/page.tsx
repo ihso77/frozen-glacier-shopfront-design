@@ -27,6 +27,7 @@ function CheckoutContent() {
     const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [paymentDisabled, setPaymentDisabled] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         const checkPayment = async () => {
