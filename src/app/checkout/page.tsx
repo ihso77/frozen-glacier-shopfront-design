@@ -26,7 +26,23 @@ function CheckoutContent() {
     });
     const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
     const [errors, setErrors] = useState<Record<string, string>>({});
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [paymentDisabled, setPaymentDisabled] = useState(false);
+
+    useEffect(() => {
+        const checkPayment = async () => {
+            try {
+                const { data } = await supabase
+                    .from('site_settings')
+                    .select('value')
+                    .eq('key', 'payment_enabled')
+                    .single();
+                if (data && (data.value === false || data.value === 'false')) {
+                    setPaymentDisabled(true);
+                }
+            } catch { }
+        };
+        checkPayment();
+    }, []);
 
     useEffect(() => {
         if (!plan) router.push("/packages");
