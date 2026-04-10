@@ -75,10 +75,16 @@ export default function AdminPage() {
         setIsFetching(true);
         try {
             if (activeTab === "users") {
-                const { data: usersData, error } = await supabase.from('users').select('*').order('created_at', { ascending: false });
+                const { data: usersData, error } = await supabase
+                    .from('profiles')
+                    .select('user_id, full_name, email, created_at')
+                    .order('created_at', { ascending: false });
                 if (!error && usersData) setData(usersData);
             } else {
-                const { data: ordersData, error } = await supabase.from('orders').select('*, users(name, email)').order('created_at', { ascending: false });
+                const { data: ordersData, error } = await supabase
+                    .from('orders')
+                    .select('id, created_at, product_name, price, payment_status, user_id')
+                    .order('created_at', { ascending: false });
                 if (!error && ordersData) setData(ordersData);
             }
         } catch (err) {
@@ -88,9 +94,9 @@ export default function AdminPage() {
         }
     };
 
-    const updateOrderStatus = async (orderId: number, status: string) => {
+    const updateOrderStatus = async (orderId: string, status: string) => {
         try {
-            await supabase.from('orders').update({ status }).eq('id', orderId);
+            await supabase.from('orders').update({ payment_status: status }).eq('id', orderId);
             fetchData();
         } catch (err) {
             console.error(err);
@@ -383,31 +389,31 @@ export default function AdminPage() {
                                                     className="hover:bg-white/[0.02] transition-colors group/row"
                                                 >
                                                     <td className="px-10 py-8">
-                                                        <div className="text-white font-black tracking-tighter uppercase italic text-lg">{order.users?.name || "UNKNOWN_OP"}</div>
-                                                        <div className="text-white/20 font-mono text-[10px] uppercase tracking-widest mt-1">{order.users?.email || "ENCRYPTED"}</div>
+                                                        <div className="text-white font-black tracking-tighter uppercase italic text-lg">{order.user_id?.slice(0, 8) || "UNKNOWN_OP"}</div>
+                                                        <div className="text-white/20 font-mono text-[10px] uppercase tracking-widest mt-1">{order.user_id || "ENCRYPTED"}</div>
                                                     </td>
                                                     <td className="px-10 py-8">
                                                         <div className="text-nova-cyan font-black tracking-[0.2em] italic uppercase text-xs">
-                                                            PROTOCOL_{order.item_name}
+                                                            PROTOCOL_{order.product_name}
                                                         </div>
                                                     </td>
                                                     <td className="px-10 py-8">
                                                         <span className="font-mono text-white/60 text-sm bg-white/[0.03] px-4 py-2 rounded-xl border border-white/5 tracking-widest italic font-black">
-                                                            ${order.amount}
+                                                            ${order.price}
                                                         </span>
                                                     </td>
                                                     <td className="px-10 py-8">
                                                         <span className={`inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl text-[10px] font-black tracking-[0.3em] uppercase border transition-all duration-500
-                                                            ${order.status === 'completed' ? 'text-green-500 bg-green-500/10 border-green-500/20 shadow-[0_0_30px_rgba(34,197,94,0.1)]' :
-                                                                order.status === 'paid' ? 'text-nova-cyan bg-nova-cyan/10 border-nova-cyan/20 shadow-[0_0_30px_rgba(6,182,212,0.1)]' :
+                                                            ${order.payment_status === 'completed' ? 'text-green-500 bg-green-500/10 border-green-500/20 shadow-[0_0_30px_rgba(34,197,94,0.1)]' :
+                                                                order.payment_status === 'paid' ? 'text-nova-cyan bg-nova-cyan/10 border-nova-cyan/20 shadow-[0_0_30px_rgba(6,182,212,0.1)]' :
                                                                     'text-yellow-500 bg-yellow-500/10 border-yellow-500/20 shadow-[0_0_30px_rgba(234,179,8,0.1)]'}`}>
-                                                            <div className={`w-2 h-2 rounded-full ${order.status === 'completed' ? 'bg-green-500' : order.status === 'paid' ? 'bg-nova-cyan' : 'bg-yellow-500 animate-pulse'}`} />
-                                                            {order.status}
+                                                            <div className={`w-2 h-2 rounded-full ${order.payment_status === 'completed' ? 'bg-green-500' : order.payment_status === 'paid' ? 'bg-nova-cyan' : 'bg-yellow-500 animate-pulse'}`} />
+                                                            {order.payment_status}
                                                         </span>
                                                     </td>
                                                     <td className="px-10 py-8 text-right">
                                                         <div className="flex justify-end gap-3 translate-x-4 opacity-0 group-hover/row:translate-x-0 group-hover/row:opacity-100 transition-all duration-500">
-                                                            {order.status !== 'completed' && (
+                                                            {order.payment_status !== 'completed' && (
                                                                 <button onClick={() => updateOrderStatus(order.id, 'completed')} className="bg-green-500/10 hover:bg-green-500 text-green-400 hover:text-white px-5 py-3 rounded-2xl text-[9px] font-black tracking-[0.4em] uppercase transition-all border border-green-500/20 shadow-xl">
                                                                     {lang === "en" ? "GRANT" : "منح"}
                                                                 </button>
@@ -429,22 +435,16 @@ export default function AdminPage() {
                                                     <td className="px-10 py-8">
                                                         <div className="flex items-center gap-6">
                                                             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-white/10 to-transparent flex items-center justify-center text-white text-xl font-black border border-white/5 shadow-inner transition-all group-hover:bg-yellow-500/20 group-hover:border-yellow-500/30">
-                                                                {userRecord.name.charAt(0).toUpperCase()}
+                                                                {(userRecord.full_name || userRecord.email || 'U').charAt(0).toUpperCase()}
                                                             </div>
-                                                            <span className="font-[1000] text-white text-xl tracking-tighter uppercase italic">{userRecord.name}</span>
+                                                            <span className="font-[1000] text-white text-xl tracking-tighter uppercase italic">{userRecord.full_name || 'UNKNOWN USER'}</span>
                                                         </div>
                                                     </td>
                                                     <td className="px-10 py-8 font-mono text-white/30 text-xs uppercase tracking-widest">{userRecord.email}</td>
                                                     <td className="px-10 py-8">
-                                                        {userRecord.role === 'owner' ? (
-                                                            <span className="flex items-center gap-3 text-yellow-500 bg-yellow-500/10 px-5 py-2.5 rounded-2xl text-[9px] font-black tracking-[0.4em] border border-yellow-500/20 shadow-[0_0_20px_rgba(234,179,8,0.1)] w-max">
-                                                                <Crown className="w-4 h-4" /> DIRECTOR
-                                                            </span>
-                                                        ) : (
-                                                            <span className="text-nova-cyan bg-nova-cyan/10 px-5 py-2.5 rounded-2xl text-[9px] font-black tracking-[0.4em] border border-nova-cyan/20 w-max shadow-[0_0_20px_rgba(6,182,212,0.05)]">
-                                                                OPERATIVE
-                                                            </span>
-                                                        )}
+                                                        <span className="text-nova-cyan bg-nova-cyan/10 px-5 py-2.5 rounded-2xl text-[9px] font-black tracking-[0.4em] border border-nova-cyan/20 w-max shadow-[0_0_20px_rgba(6,182,212,0.05)]">
+                                                            OPERATIVE
+                                                        </span>
                                                     </td>
                                                     <td className="px-10 py-8 font-mono text-white/20 text-xs uppercase tracking-widest italic">
                                                         {new Date(userRecord.created_at).toLocaleDateString(lang === 'en' ? 'en-US' : 'ar-EG')}

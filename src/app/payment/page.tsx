@@ -62,14 +62,10 @@ function PaymentContent() {
         try {
             const { error: dbError } = await supabase.from('orders').insert([{
                 user_id: user.id,
-                item_name: item,
-                item_type: type,
-                amount: parseFloat(amount),
-                status: 'paid',
-                payment_id: data.orderID || "mock_payment_id_" + Date.now(),
-                website_type: searchParams.get("plan") || null,
-                description: searchParams.get("description") || null,
-                preferred_language: searchParams.get("lang") || null,
+                product_name: item,
+                price: parseFloat(amount),
+                payment_status: 'paid',
+                payment_method: 'paypal',
             }]);
 
             if (dbError) throw dbError;
