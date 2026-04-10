@@ -197,7 +197,7 @@ export default function TutorialPage() {
             {/* --- Background Glows --- */}
             <div className="absolute top-0 left-1/4 w-[700px] h-[700px] bg-nova-purple blur-[250px] opacity-10 rounded-full pointer-events-none mix-blend-screen" />
             <div className="absolute bottom-0 right-1/4 w-[700px] h-[700px] bg-nova-cyan blur-[250px] opacity-10 rounded-full pointer-events-none mix-blend-screen" />
-            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] pointer-events-none" />
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-noise" />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative z-10">
 
