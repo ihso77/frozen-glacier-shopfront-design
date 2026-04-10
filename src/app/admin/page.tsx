@@ -4,7 +4,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth, supabase } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Crown, Users, Package, DollarSign, Clock, Search, Filter, Shield, Activity, Network, ChevronRight } from "lucide-react";
+import { Crown, Users, Package, DollarSign, Clock, Search, Filter, Shield, Activity, Network, ChevronRight, CreditCard, Power } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function AdminPage() {
@@ -24,6 +24,42 @@ export default function AdminPage() {
         revenue: 5000,
         pending: 10
     });
+
+    const [paymentEnabled, setPaymentEnabled] = useState(true);
+    const [paymentLoading, setPaymentLoading] = useState(false);
+
+    useEffect(() => {
+        if (!loading && user && user.role === "owner") {
+            fetchPaymentSetting();
+        }
+    }, [user, loading]);
+
+    const fetchPaymentSetting = async () => {
+        try {
+            const { data: setting } = await supabase
+                .from('site_settings')
+                .select('value')
+                .eq('key', 'payment_enabled')
+                .single();
+            if (setting) {
+                setPaymentEnabled(setting.value === true || setting.value === 'true');
+            }
+        } catch { }
+    };
+
+    const togglePayment = async () => {
+        setPaymentLoading(true);
+        try {
+            const newValue = !paymentEnabled;
+            const { error } = await supabase
+                .from('site_settings')
+                .upsert({ key: 'payment_enabled', value: newValue, updated_at: new Date().toISOString() }, { onConflict: 'key' });
+            if (!error) {
+                setPaymentEnabled(newValue);
+            }
+        } catch { }
+        setPaymentLoading(false);
+    };
 
     useEffect(() => {
         if (!loading) {
@@ -163,6 +199,51 @@ export default function AdminPage() {
                         </motion.div>
                     ))}
                 </div>
+
+                {/* Payment Toggle Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.9, duration: 0.8 }}
+                    className="mb-20 relative z-10"
+                >
+                    <div className="bg-[#050510]/60 backdrop-blur-3xl border border-white/5 rounded-[2.5rem] p-8 md:p-10 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden shadow-2xl">
+                        <div className={`absolute top-0 left-0 w-full h-1 ${paymentEnabled ? 'bg-gradient-to-r from-green-500/50 via-green-400/30 to-transparent' : 'bg-gradient-to-r from-red-500/50 via-red-400/30 to-transparent'} transition-all duration-700`} />
+                        
+                        <div className="flex items-center gap-6">
+                            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border transition-all duration-500 ${paymentEnabled ? 'bg-green-500/10 border-green-500/20 shadow-[0_0_30px_rgba(34,197,94,0.15)]' : 'bg-red-500/10 border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.15)]'}`}>
+                                <CreditCard className={`w-8 h-8 transition-colors duration-500 ${paymentEnabled ? 'text-green-400' : 'text-red-400'}`} />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-[1000] text-white uppercase tracking-tighter italic">
+                                    {lang === "en" ? "Payment System" : "نظام الدفع"}
+                                </h3>
+                                <p className={`text-[10px] font-black uppercase tracking-[0.4em] mt-1 transition-colors duration-500 ${paymentEnabled ? 'text-green-400/60' : 'text-red-400/60'}`}>
+                                    {paymentEnabled 
+                                        ? (lang === "en" ? "ACTIVE — Users can purchase" : "مُفعّل — يمكن للمستخدمين الشراء")
+                                        : (lang === "en" ? "DISABLED — Purchases blocked" : "مُعطّل — الشراء محظور")}
+                                </p>
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={togglePayment}
+                            disabled={paymentLoading}
+                            className={`relative flex items-center gap-3 px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] border transition-all duration-500 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed ${
+                                paymentEnabled 
+                                    ? 'bg-red-500/10 border-red-500/20 text-red-400 hover:bg-red-500 hover:text-white' 
+                                    : 'bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500 hover:text-white'
+                            }`}
+                        >
+                            <Power className="w-4 h-4" />
+                            {paymentLoading 
+                                ? (lang === "en" ? "Processing..." : "جاري...")
+                                : paymentEnabled 
+                                    ? (lang === "en" ? "Disable Payment" : "تعطيل الدفع")
+                                    : (lang === "en" ? "Enable Payment" : "تفعيل الدفع")}
+                        </button>
+                    </div>
+                </motion.div>
 
                 {/* Command Center Controls */}
                 <div className="flex flex-col lg:flex-row justify-between items-center gap-10 mb-12 relative z-10">

@@ -17,7 +17,7 @@ import {
     AlertCircle,
     Calendar
 } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function ProfilePage() {
@@ -309,7 +309,7 @@ export default function ProfilePage() {
                                 </div>
 
                                 <div className="pt-6 flex justify-end">
-                                    <Button type="submit" variant="primary" className="py-6 px-12 text-xs font-black tracking-[0.4em] uppercase shadow-[0_20px_40px_rgba(167,139,250,0.2)] hover:scale-[1.05] transition-all rounded-2xl" isLoading={isSaving}>
+                                    <Button type="submit" variant="default" className="py-6 px-12 text-xs font-black tracking-[0.4em] uppercase shadow-[0_20px_40px_rgba(167,139,250,0.2)] hover:scale-[1.05] transition-all rounded-2xl" disabled={isSaving}>
                                         {lang === "en" ? "UPDATE MATRIX" : "تحديث المصفوفة"}
                                     </Button>
                                 </div>
@@ -349,7 +349,7 @@ export default function ProfilePage() {
                                 </div>
 
                                 <div className="pt-2">
-                                    <Button type="submit" variant="secondary" className="py-6 px-12 text-xs font-black tracking-[0.4em] uppercase bg-nova-pink/10 border-nova-pink/20 text-nova-pink hover:bg-nova-pink hover:text-white rounded-2xl shadow-[0_0_30px_rgba(236,72,153,0.1)]" isLoading={isUpdatingPassword}>
+                                    <Button type="submit" variant="secondary" className="py-6 px-12 text-xs font-black tracking-[0.4em] uppercase bg-nova-pink/10 border-nova-pink/20 text-nova-pink hover:bg-nova-pink hover:text-white rounded-2xl shadow-[0_0_30px_rgba(236,72,153,0.1)]" disabled={isUpdatingPassword}>
                                         {lang === "en" ? "ENCODE ACCESS" : "تشفير الدخول"}
                                     </Button>
                                 </div>

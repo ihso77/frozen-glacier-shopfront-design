@@ -6,7 +6,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Star, Globe, Crown, LogOut, Menu, X, User, BookOpen } from "lucide-react";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
     const { lang, setLang, t } = useLanguage();

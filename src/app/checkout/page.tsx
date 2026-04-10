@@ -1,10 +1,11 @@
 "use client";
 
 import { Suspense, useState, useEffect } from "react";
+import { supabase } from "@/contexts/AuthContext";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { ShieldCheck, Star, Lock, Box, ChevronRight, Activity, CheckCircle2, Zap } from "lucide-react";
 import { checkoutSchema } from "@/lib/validations";
 import { z } from "zod";
@@ -25,7 +26,24 @@ function CheckoutContent() {
     });
     const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [paymentDisabled, setPaymentDisabled] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        const checkPayment = async () => {
+            try {
+                const { data } = await supabase
+                    .from('site_settings')
+                    .select('value')
+                    .eq('key', 'payment_enabled')
+                    .single();
+                if (data && (data.value === false || data.value === 'false')) {
+                    setPaymentDisabled(true);
+                }
+            } catch { }
+        };
+        checkPayment();
+    }, []);
 
     useEffect(() => {
         if (!plan) router.push("/packages");
@@ -36,6 +54,12 @@ function CheckoutContent() {
         setIsSubmitting(true);
         setErrors({});
 
+        if (paymentDisabled) {
+            setErrors({ submit: lang === "ar" ? "الدفع معطل مؤقتاً من قبل الإدارة" : "Payment is temporarily disabled by admin" });
+            setIsSubmitting(false);
+            return;
+        }
+
         try {
             checkoutSchema.parse(form);
 
@@ -45,7 +69,7 @@ function CheckoutContent() {
                 return;
             }
 
-            // Skip payment - go directly to success (testing mode)
+            // Payment enabled - go to success
             setTimeout(() => {
                 router.push(`/success?type=service&plan=${plan}&lang_code=${selectedLanguage}`);
             }, 1500);

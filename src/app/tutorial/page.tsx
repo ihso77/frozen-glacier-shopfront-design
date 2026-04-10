@@ -7,7 +7,7 @@ import {
     ChevronRight, Package, CreditCard, User,
     ShoppingBag, Star, ArrowRight, CheckCircle2, LayoutDashboard, BookOpen
 } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import PromotionalCanvas from "@/components/ui/PromotionalCanvas";
 import { motion, AnimatePresence } from "framer-motion";
 

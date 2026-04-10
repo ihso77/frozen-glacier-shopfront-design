@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Mail, Lock, AlertCircle, ArrowRight, ShieldCheck } from "lucide-react";
 import { supabase } from "@/contexts/AuthContext";
@@ -133,7 +133,7 @@ export default function LoginPage() {
                                 </div>
                             </div>
 
-                            <Button type="submit" variant="primary" className="w-full mt-10 h-18 text-xs font-black tracking-[0.4em] uppercase shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:scale-[1.02] transition-transform rounded-[1.5rem]" isLoading={loading}>
+                            <Button type="submit" variant="default" className="w-full mt-10 h-18 text-xs font-black tracking-[0.4em] uppercase shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:scale-[1.02] transition-transform rounded-[1.5rem]" disabled={loading}>
                                 {lang === "en" ? "AUTHORIZE ACCESS" : "تصريح الدخول"}
                                 {!loading && <ArrowRight className={`w-5 h-5 ml-4 ${lang === 'ar' ? 'rotate-180' : ''}`} />}
                             </Button>

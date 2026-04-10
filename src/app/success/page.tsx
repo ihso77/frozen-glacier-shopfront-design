@@ -1,7 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, Stars, ShieldCheck, Home, Terminal, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
