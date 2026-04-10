@@ -4,7 +4,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth, supabase } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Crown, Users, Package, DollarSign, Clock, Search, Filter, Shield, Activity, Network, ChevronRight } from "lucide-react";
+import { Crown, Users, Package, DollarSign, Clock, Search, Filter, Shield, Activity, Network, ChevronRight, CreditCard, Power } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function AdminPage() {
