@@ -8,7 +8,7 @@ const nextConfig: any = {
   images: {
     unoptimized: true,
   },
-  bundlePagesRouterDependencies: true,
+  serverExternalPackages: ["lightningcss", "@tailwindcss/postcss", "@tailwindcss/node"],
 };
 
 export default nextConfig;
